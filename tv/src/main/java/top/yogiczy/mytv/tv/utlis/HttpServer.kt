@@ -332,7 +332,7 @@ object HttpServer : Loggable() {
     }
 
     private fun getLocalIpAddress(): String {
-        val defaultIp = "0.0.0.0"
+        val defaultIp = "127.0.0.1"
 
         try {
             val en = NetworkInterface.getNetworkInterfaces()
