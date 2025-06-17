@@ -26,11 +26,10 @@ jobs:
 
       - name: 生成apk
         run: chmod +x ./gradlew && ./gradlew assembleRelease
-
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD}}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
 
       - name: 获取版本号
         id: version
@@ -50,6 +49,12 @@ jobs:
           mkdir artifacts
           cp app/build/outputs/apk/release/*.apk artifacts/
 
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-apks
+          path: artifacts/
+
       - name: Upload Release
         uses: ncipollo/release-action@v1
         with:
@@ -60,23 +65,17 @@ jobs:
           omitPrereleaseDuringUpdate: true
           allowUpdates: true
           artifacts: artifacts/*
-           
-  uses: actions/download-artifact@v4.3.0
-  with:
-    # Name of the artifact to download. If unspecified, all artifacts for the run are downloaded.
-    name: # optional
-    # IDs of the artifacts to download, comma-separated. Either inputs `artifact-ids` or `name` can be used, but not both.
-    artifact-ids: # optional
-    # Destination path. Supports basic tilde expansion. Defaults to $GITHUB_WORKSPACE
-    path: # optional
-    # A glob pattern matching the artifacts that should be downloaded. Ignored if name is specified.
-    pattern: # optional
-    # When multiple artifacts are matched, this changes the behavior of the destination directories. If true, the downloaded artifacts will be in the same directory specified by path. If false, the downloaded artifacts will be extracted into individual named directories within the specified path.
-    merge-multiple: # optional, default is false
-    # The GitHub token used to authenticate with the GitHub API. This is required when downloading artifacts from a different repository or from a different workflow run. If this is not specified, the action will attempt to download artifacts from the current repository and the current workflow run.
-    github-token: # optional
-    # The repository owner and the repository name joined together by "/". If github-token is specified, this is the repository that artifacts will be downloaded from.
-    repository: # optional, default is ${{ github.repository }}
-    # The id of the workflow run where the desired download artifact was uploaded from. If github-token is specified, this is the run that artifacts will be downloaded from.
-    run-id: # optional, default is ${{ github.run_id }}
+
+  download:
+    runs-on: ubuntu-latest
+    needs: build  # 依赖build作业完成
+    
+    steps:
+      - name: 下载构建产物
+        uses: actions/download-artifact@v4.3.0
+        with:
+          name: release-apks  # 指定要下载的artifact名称
+          path: ./downloaded-artifacts
           
+      - name: 列出下载的文件
+        run: ls -R ./downloaded-artifacts
