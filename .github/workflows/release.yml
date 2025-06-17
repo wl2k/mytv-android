@@ -54,18 +54,13 @@ jobs:
         with:
           name: release-apks
           path: artifacts/
+          
       - name: Upload Release
         uses: ncipollo/release-action@v1
         with:
           name: v${{ steps.version.outputs.version }}
           token: ${{ secrets.GIT_TOKEN }}
           omitBodyDuringUpdate: true
-         - name: 生成apk
-  run: chmod +x ./gradlew && ./gradlew assembleRelease
-  env:
-    KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-    KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-    KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}  # 修正此处的空格问题
           omitPrereleaseDuringUpdate: true
           allowUpdates: true
           artifacts: artifacts/*
@@ -76,7 +71,7 @@ jobs:
     
     steps:
       - name: 下载构建产物
-        uses: actions/download-artifact@v4.3.0
+        uses: actions/download-artifact@v4  # 修正版本号
         with:
           name: release-apks  # 指定要下载的artifact名称
           path: ./downloaded-artifacts
