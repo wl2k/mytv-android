@@ -61,6 +61,7 @@ jobs:
           name: v${{ steps.version.outputs.version }}
           token: ${{ secrets.GIT_TOKEN }}
           omitBodyDuringUpdate: true
+          # 修复：删除了错误的连字符（-）
           omitPrereleaseDuringUpdate: true
           allowUpdates: true
           artifacts: artifacts/*
