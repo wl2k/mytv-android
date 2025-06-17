@@ -20,12 +20,23 @@ jobs:
           java-version: "17"
 
       - name: 解码生成 jks
-        run: echo $KEYSTORE_BASE64 | base64 -di > app/keystore.jks
+        run: |
+          mkdir -p app  # 确保目录存在
+          echo $KEYSTORE_BASE64 | base64 -di > app/keystore.jks
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
 
       - name: 生成apk
-        run: chmod +x ./gradlew && ./gradlew assembleRelease
+        run: |
+          chmod +x ./gradlew
+          # 添加详细日志输出
+          ./gradlew assembleRelease --stacktrace || {
+            echo "构建失败！保存日志..."
+            # 保存关键日志
+            cat app/build/outputs/logs/*.log || true
+            cat app/build/reports/*/*.txt || true
+            exit 1
+          }
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
@@ -33,38 +44,61 @@ jobs:
 
       - name: 获取版本号
         id: version
-        run: echo "version=${GITHUB_REF#refs/tags/v}" >>$GITHUB_OUTPUT
+        run: |
+          version="${GITHUB_REF#refs/tags/v}"
+          echo "版本号: $version"
+          echo "version=$version" >>$GITHUB_OUTPUT
 
       - name: 重命名应用
         run: |
-          for file in app/build/outputs/apk/release/app-*.apk; do
-            if [[ $file =~ app-(.?*)release.apk ]]; then
-              new_file_name="app/build/outputs/apk/release/mytv-android-${BASH_REMATCH[1]}${{ steps.version.outputs.version }}.apk"
-              mv "$file" "$new_file_name"
-            fi
+          # 列出原始文件
+          echo "APK文件列表:"
+          ls -l app/build/outputs/apk/release/
+          
+          # 处理每个APK文件
+          for file in app/build/outputs/apk/release/*.apk; do
+            # 提取文件名部分 (如 'universal' 或 'arm64-v8a')
+            flavor=$(basename "$file" | sed -E 's/app-(.*)-release.*\.apk/\1/')
+            
+            # 构建新文件名
+            new_name="mytv-android-$flavor-${{ steps.version.outputs.version }}.apk"
+            new_path="app/build/outputs/apk/release/$new_name"
+            
+            echo "重命名: $(basename "$file") → $new_name"
+            mv "$file" "$new_path"
           done
+          
+          # 验证重命名结果
+          echo "重命名后文件:"
+          ls -l app/build/outputs/apk/release/
 
-      - name: Prepare artifacts
+      - name: 准备产物
         run: |
-          mkdir artifacts
+          # 创建artifacts目录
+          mkdir -p artifacts
+          
+          # 复制所有APK文件
           cp app/build/outputs/apk/release/*.apk artifacts/
+          
+          # 显示复制结果
+          echo "artifacts目录内容:"
+          ls -l artifacts
 
-      - name: Upload artifacts
+      - name: 上传构建产物
         uses: actions/upload-artifact@v4
         with:
           name: release-apks
-          path: artifacts/
+          path: artifacts/  # 这是原始的第56行
 
-      - name: Upload Release
+      - name: 创建GitHub Release
         uses: ncipollo/release-action@v1
         with:
           name: v${{ steps.version.outputs.version }}
           token: ${{ secrets.GIT_TOKEN }}
           omitBodyDuringUpdate: true
-          # 修复：删除了错误的连字符（-）
           omitPrereleaseDuringUpdate: true
           allowUpdates: true
-          artifacts: artifacts/*
+          artifacts: artifacts/*.apk  # 明确指定APK文件
 
   download:
     runs-on: ubuntu-latest
@@ -77,5 +111,13 @@ jobs:
           name: release-apks
           path: ./downloaded-artifacts
           
-      - name: 列出下载的文件
-        run: ls -R ./downloaded-artifacts
+      - name: 验证下载的文件
+        run: |
+          echo "下载的文件列表:"
+          ls -lR ./downloaded-artifacts
+          
+          # 检查是否有APK文件
+          if [ -z "$(find ./downloaded-artifacts -name '*.apk')" ]; then
+            echo "错误：未找到APK文件！"
+            exit 1
+          fi
