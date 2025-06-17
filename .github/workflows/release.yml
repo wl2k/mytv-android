@@ -54,7 +54,6 @@ jobs:
         with:
           name: release-apks
           path: artifacts/
-
       - name: Upload Release
         uses: ncipollo/release-action@v1
         with:
