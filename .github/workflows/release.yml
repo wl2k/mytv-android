@@ -52,7 +52,6 @@ jobs:
 
       - name: Upload Release
         uses: ncipollo/release-action@v1
-          token: ${{ secrets.GIT_TOKEN }}
           omitBodyDuringUpdate: true
           omitNameDuringUpdate: true
           omitPrereleaseDuringUpdate: true
