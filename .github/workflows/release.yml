@@ -61,7 +61,12 @@ jobs:
           name: v${{ steps.version.outputs.version }}
           token: ${{ secrets.GIT_TOKEN }}
           omitBodyDuringUpdate: true
-          omitNameDuringUpdate: true
+         - name: 生成apk
+  run: chmod +x ./gradlew && ./gradlew assembleRelease
+  env:
+    KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+    KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+    KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}  # 修正此处的空格问题
           omitPrereleaseDuringUpdate: true
           allowUpdates: true
           artifacts: artifacts/*
