@@ -247,7 +247,7 @@ object SP {
 
     /** 时间显示模式 */
     var uiTimeShowMode: UiTimeShowMode
-        get() = UiTimeShowMode.fromValue(sp.getInt(KEY.UI_TIME_SHOW_MODE.name, 0))
+        get() = UiTimeShowMode.fromValue(sp.getInt(KEY.UI_TIME_SHOW_MODE.name, 1))
         set(value) = sp.edit().putInt(KEY.UI_TIME_SHOW_MODE.name, value.value).apply()
 
     /** 画中画模式 */
