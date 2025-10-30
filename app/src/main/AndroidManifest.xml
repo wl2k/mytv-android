@@ -11,7 +11,6 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <application
         android:name=".MyTVApplication"
@@ -26,7 +25,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyTV"
         android:usesCleartextTraffic="true"
-        tools:targetApi="31">
+        tools:targetApi="31"
+        tools:ignore="DiscouragedApi">
         <activity
             android:name=".activities.MainActivity"
             android:exported="false"

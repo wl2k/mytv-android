@@ -41,7 +41,6 @@ import top.yogiczy.mytv.ui.screens.leanback.quickpanel.LeanbackQuickPanelScreen
 import top.yogiczy.mytv.ui.screens.leanback.settings.LeanbackSettingsScreen
 import top.yogiczy.mytv.ui.screens.leanback.settings.LeanbackSettingsViewModel
 import top.yogiczy.mytv.ui.screens.leanback.toast.LeanbackToastState
-import top.yogiczy.mytv.ui.screens.leanback.update.LeanbackUpdateScreen
 import top.yogiczy.mytv.ui.screens.leanback.video.LeanbackVideoScreen
 import top.yogiczy.mytv.ui.screens.leanback.video.rememberLeanbackVideoPlayerState
 import top.yogiczy.mytv.ui.utils.SP
@@ -312,8 +311,6 @@ fun LeanbackMainContent(
         LeanbackVisible({ settingsViewModel.debugShowFps }) {
             LeanbackMonitorScreen()
         }
-
-        LeanbackUpdateScreen()
     }
 }
 

@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Devices.TV_720p
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import top.yogiczy.mytv.ui.theme.LeanbackTheme
@@ -18,7 +19,7 @@ import top.yogiczy.mytv.ui.theme.LeanbackTheme
 @Composable
 fun LeanbackVideoPlayerErrorScreen(
     modifier: Modifier = Modifier,
-    errorProvider: () -> String? = { null },
+    errorProvider: () -> String?,
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         val error = errorProvider()
@@ -49,7 +50,7 @@ fun LeanbackVideoPlayerErrorScreen(
     }
 }
 
-@Preview(device = "id:Android TV (720p)")
+@Preview(device = TV_720p)
 @Composable
 private fun LeanbackVideoPlayerErrorScreenPreview() {
     LeanbackTheme {

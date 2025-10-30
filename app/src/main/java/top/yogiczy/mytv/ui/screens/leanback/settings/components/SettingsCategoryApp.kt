@@ -13,7 +13,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.tv.foundation.lazy.list.TvLazyColumn
 import top.yogiczy.mytv.ui.screens.leanback.settings.LeanbackSettingsViewModel
-import top.yogiczy.mytv.ui.screens.leanback.update.LeanBackUpdateViewModel
 import top.yogiczy.mytv.ui.theme.LeanbackTheme
 import top.yogiczy.mytv.ui.utils.SP
 
@@ -21,7 +20,6 @@ import top.yogiczy.mytv.ui.utils.SP
 fun LeanbackSettingsCategoryApp(
     modifier: Modifier = Modifier,
     settingsViewModel: LeanbackSettingsViewModel = viewModel(),
-    updateViewModel: LeanBackUpdateViewModel = viewModel(),
 ) {
 
     TvLazyColumn(
@@ -58,18 +56,6 @@ fun LeanbackSettingsCategoryApp(
 //                    settingsViewModel.appDeviceDisplayType = SP.AppDeviceDisplayType.entries[
 //                        (settingsViewModel.appDeviceDisplayType.ordinal + 1) % SP.AppDeviceDisplayType.entries.size
 //                    ]
-                },
-            )
-        }
-
-        item {
-            LeanbackSettingsCategoryListItem(
-                headlineContent = "应用更新",
-                supportingContent = "最新版本：v${updateViewModel.latestRelease.version}",
-                trailingContent = if (updateViewModel.isUpdateAvailable) "发现新版本" else "无更新",
-                onSelected = {
-                    if (updateViewModel.isUpdateAvailable)
-                        updateViewModel.showDialog = true
                 },
             )
         }

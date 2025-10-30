@@ -1,5 +1,6 @@
 package top.yogiczy.mytv.ui.utils
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.Toast
 import com.koushikdutta.async.AsyncServer
@@ -199,6 +200,7 @@ object HttpServer : Loggable() {
     }
 }
 
+@SuppressLint("UnsafeOptInUsageError")
 @Serializable
 private data class AllSettings(
     val appTitle: String,

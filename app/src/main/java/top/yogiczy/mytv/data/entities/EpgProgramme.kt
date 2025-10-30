@@ -1,10 +1,12 @@
 package top.yogiczy.mytv.data.entities
 
+import android.annotation.SuppressLint
 import kotlinx.serialization.Serializable
 
 /**
  * 频道节目
  */
+@SuppressLint("UnsafeOptInUsageError")
 @Serializable
 data class EpgProgramme(
     /**

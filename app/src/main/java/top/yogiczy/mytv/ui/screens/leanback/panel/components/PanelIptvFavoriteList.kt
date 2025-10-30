@@ -154,7 +154,7 @@ fun LeanbackPanelIptvFavoriteList(
     )
 }
 
-@Preview(device = "id:Android TV (720p)")
+@Preview(device = "id:pixel_5")
 @Composable
 private fun LeanbackPanelIptvFavoriteListPreview() {
     LeanbackTheme {

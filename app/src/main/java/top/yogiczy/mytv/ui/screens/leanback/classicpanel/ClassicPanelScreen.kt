@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.serialization.InternalSerializationApi
 import top.yogiczy.mytv.data.entities.Epg
 import top.yogiczy.mytv.data.entities.EpgList
 import top.yogiczy.mytv.data.entities.EpgProgramme
@@ -123,7 +124,7 @@ private fun LeanbackClassicPanelScreenWrapper(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, InternalSerializationApi::class)
 @Composable
 private fun LeanbackClassicPanelScreenContent(
     modifier: Modifier = Modifier,
@@ -197,8 +198,9 @@ private fun LeanbackClassicPanelScreenContent(
             iptvGroupProvider = { focusedIptvGroup },
             iptvListProvider = {
                 if (focusedIptvGroup == LeanbackClassicPanelScreenFavoriteIptvGroup)
-                    IptvList(iptvGroupListProvider().iptvList
-                        .filter { iptvFavoriteListProvider().contains(it.channelName) })
+                    IptvList(
+                        iptvGroupListProvider().iptvList
+                            .filter { iptvFavoriteListProvider().contains(it.channelName) })
                 else
                     focusedIptvGroup.iptvList
             },
@@ -227,7 +229,6 @@ private fun LeanbackClassicPanelScreenContent(
                 modifier = Modifier
                     .background(MaterialTheme.colorScheme.background.copy(0.7f))
                     .padding(horizontal = 4.dp),
-                text = "向右查看节目单",
                 onTap = { epgListVisible = true },
             )
         }
@@ -237,9 +238,10 @@ private fun LeanbackClassicPanelScreenContent(
 @Composable
 private fun LeanbackClassicPanelVerticalTip(
     modifier: Modifier = Modifier,
-    text: String,
     onTap: () -> Unit = {},
 ) {
+    val text = "向右查看节目单"
+
     Column(
         modifier = modifier
             .fillMaxHeight()
@@ -255,7 +257,7 @@ private fun LeanbackClassicPanelVerticalTip(
     }
 }
 
-@Preview(device = "id:Android TV (720p)")
+@Preview(device = "id:pixel_5")
 @Composable
 private fun LeanbackClassicPanelScreenPreview() {
     LeanbackTheme {

@@ -1,5 +1,6 @@
 package top.yogiczy.mytv.utils
 
+import android.annotation.SuppressLint
 import android.util.Log
 import kotlinx.serialization.Serializable
 import top.yogiczy.mytv.data.utils.Constants
@@ -30,11 +31,6 @@ class Logger private constructor(
         addHistoryItem(HistoryItem(LevelType.ERROR, tag, message, throwable?.message))
     }
 
-    fun wtf(message: String, throwable: Throwable? = null) {
-        Log.wtf(tag, message, throwable)
-        addHistoryItem(HistoryItem(LevelType.ERROR, tag, message, throwable?.message))
-    }
-
     companion object {
         fun create(tag: String) = Logger(tag)
 
@@ -49,9 +45,10 @@ class Logger private constructor(
     }
 
     enum class LevelType {
-        DEBUG, INFO, WARN, ERROR
+        INFO, WARN, ERROR
     }
 
+    @SuppressLint("UnsafeOptInUsageError")
     @Serializable
     data class HistoryItem(
         val level: LevelType,

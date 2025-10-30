@@ -1,5 +1,8 @@
+@file:OptIn(InternalSerializationApi::class)
+
 package top.yogiczy.mytv.data.entities
 
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import top.yogiczy.mytv.data.entities.EpgProgramme.Companion.isLive
 

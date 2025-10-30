@@ -211,8 +211,9 @@ fun LeanbackPanelScreenBottomIptvList(
         if (favoriteListVisible)
             LeanbackPanelIptvFavoriteList(
                 iptvListProvider = {
-                    IptvList(iptvGroupListProvider().iptvList
-                        .filter { iptvFavoriteListProvider().contains(it.channelName) })
+                    IptvList(
+                        iptvGroupListProvider().iptvList
+                            .filter { iptvFavoriteListProvider().contains(it.channelName) })
                 },
                 epgListProvider = epgListProvider,
                 currentIptvProvider = currentIptvProvider,
@@ -251,7 +252,7 @@ fun LeanbackPanelScreenBottomIptvList(
     }
 }
 
-@Preview(device = "id:Android TV (720p)")
+@Preview(device = "id:pixel_5")
 @Composable
 private fun LeanbackPanelScreenTopRightPreview() {
     LeanbackTheme {
@@ -261,7 +262,7 @@ private fun LeanbackPanelScreenTopRightPreview() {
     }
 }
 
-@Preview(device = "id:Android TV (720p)")
+@Preview(device = "id:pixel_5")
 @Composable
 private fun LeanbackPanelScreenBottomPreview() {
     LeanbackTheme {
@@ -273,7 +274,7 @@ private fun LeanbackPanelScreenBottomPreview() {
     }
 }
 
-@Preview(device = "id:Android TV (720p)")
+@Preview(device = "id:pixel_5")
 @Composable
 private fun LeanbackPanelScreenPreview() {
     LeanbackTheme {

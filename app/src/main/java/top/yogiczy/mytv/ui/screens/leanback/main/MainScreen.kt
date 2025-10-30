@@ -97,7 +97,7 @@ private fun LeanbackMainScreenLoading(messageProvider: () -> String?) {
     }
 }
 
-@Preview(device = "id:Android TV (720p)")
+@Preview(device = "id:pixel_5")
 @Composable
 private fun LeanbackMainScreenLoadingPreview() {
     LeanbackTheme {
@@ -164,7 +164,7 @@ private fun LeanbackMainScreenError(
     }
 }
 
-@Preview(device = "id:Android TV (720p)")
+@Preview(device = "id:pixel_5")
 @Composable
 private fun LeanbackMainScreenErrorPreview() {
     LeanbackTheme {
@@ -175,7 +175,7 @@ private fun LeanbackMainScreenErrorPreview() {
     }
 }
 
-@Preview(device = "id:Android TV (720p)")
+@Preview(device = "id:pixel_5")
 @Composable
 private fun LeanbackMainScreenErrorLongPreview() {
     LeanbackTheme {

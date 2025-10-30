@@ -105,7 +105,7 @@ private fun LeanbackToastContentIcon(
     }
 }
 
-@Preview(device = "id:Android TV (720p)", showBackground = true)
+@Preview(device = "id:pixel_5", showBackground = true)
 @Composable
 private fun LeanbackToastScreenAnimationPreview() {
     LeanbackTheme {

@@ -217,11 +217,12 @@ private fun LeanbackQuickPanelActionVideoAspectRatio(
     )
 }
 
-@Preview(device = "id:Android TV (720p)")
+@Preview(device = "id:pixel_5")
 @Composable
 private fun LeanbackQuickPanelScreenPreview() {
     LeanbackTheme {
-        LeanbackQuickPanelScreen(currentIptvProvider = { Iptv.EXAMPLE },
+        LeanbackQuickPanelScreen(
+            currentIptvProvider = { Iptv.EXAMPLE },
             currentProgrammesProvider = { EpgProgrammeCurrent.EXAMPLE },
             videoPlayerMetadataProvider = {
                 LeanbackVideoPlayer.Metadata(
