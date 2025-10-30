@@ -23,6 +23,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.tooling.preview.Devices.TV_720p
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.ButtonDefaults
@@ -113,18 +114,18 @@ fun LeanbackQuickPanelScreen(
                         onUserAction = { autoCloseState.active() },
                     )
 
-                    LeanbackQuickPanelButton(
-                        titleProvider = { "清除缓存" },
-                        onSelect = onClearCache,
-                    )
-
                     LeanbackQuickPanelActionVideoAspectRatio(
                         videoPlayerAspectRatioProvider = videoPlayerAspectRatioProvider,
                         onChangeVideoPlayerAspectRatio = onChangeVideoPlayerAspectRatio,
                     )
 
                     LeanbackQuickPanelButton(
-                        titleProvider = { "更多设置" },
+                        titleProvider = { "清除缓存" },
+                        onSelect = onClearCache,
+                    )
+
+                    LeanbackQuickPanelButton(
+                        titleProvider = { "设置" },
                         onSelect = onMoreSettings,
                     )
                 }
@@ -173,7 +174,7 @@ private fun LeanbackQuickPanelActionMultipleChannels(
     if (currentIptvProvider().urlList.size > 1) {
         var showChannelsDialog by remember { mutableStateOf(false) }
         LeanbackQuickPanelButton(
-            titleProvider = { "多线路" },
+            titleProvider = { "线路" },
             onSelect = { showChannelsDialog = true },
         )
         LeanbackQuickPanelIptvChannelsDialog(
@@ -197,10 +198,10 @@ private fun LeanbackQuickPanelActionVideoAspectRatio(
         configuration.screenWidthDp.toFloat() / configuration.screenHeightDp.toFloat()
     LeanbackQuickPanelButton(
         titleProvider = {
-            "画面比例 " + when (videoPlayerAspectRatioProvider()) {
+            when (videoPlayerAspectRatioProvider()) {
                 16f / 9f -> "16:9"
                 4f / 3f -> "4:3"
-                screenAspectRatio -> "自动拉伸"
+                screenAspectRatio -> "拉伸"
                 else -> "原始"
             }
         },
@@ -209,7 +210,6 @@ private fun LeanbackQuickPanelActionVideoAspectRatio(
                 when (videoPlayerAspectRatioProvider()) {
                     16f / 9f -> 4f / 3f
                     4f / 3f -> screenAspectRatio
-                    screenAspectRatio -> 16f / 9f
                     else -> 16f / 9f
                 }
             )
@@ -217,7 +217,7 @@ private fun LeanbackQuickPanelActionVideoAspectRatio(
     )
 }
 
-@Preview(device = "id:pixel_5")
+@Preview(device = TV_720p)
 @Composable
 private fun LeanbackQuickPanelScreenPreview() {
     LeanbackTheme {

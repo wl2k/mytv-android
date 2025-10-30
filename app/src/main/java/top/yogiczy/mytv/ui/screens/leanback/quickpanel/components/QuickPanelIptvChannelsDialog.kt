@@ -39,7 +39,6 @@ import okio.IOException
 import top.yogiczy.mytv.data.entities.Iptv
 import top.yogiczy.mytv.ui.theme.LeanbackTheme
 import top.yogiczy.mytv.ui.utils.handleLeanbackKeyEvents
-import top.yogiczy.mytv.utils.isIPv6
 import kotlin.math.max
 import kotlin.system.measureTimeMillis
 
@@ -153,11 +152,6 @@ private fun LeanbackQuickPanelIptvChannelItem(
                                 MaterialTheme.shapes.extraSmall,
                             )
                             .padding(vertical = 2.dp, horizontal = 4.dp)
-
-                        androidx.tv.material3.Text(
-                            text = if (url.isIPv6()) "IPV6" else "IPV4",
-                            modifier = textModifier,
-                        )
 
                         if (urlDelay != 0L) {
                             androidx.tv.material3.Text(

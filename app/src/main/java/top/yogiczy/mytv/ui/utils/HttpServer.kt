@@ -50,31 +50,28 @@ object HttpServer : Loggable() {
                 server.get("/") { _, response ->
                     handleRawResource(response, context, "text/html", R.raw.index)
                 }
-                server.get("/index_css.css") { _, response ->
-                    handleRawResource(response, context, "text/css", R.raw.index_css)
+                server.get("/css") { _, response ->
+                    handleRawResource(response, context, "text/css", R.raw.styles)
                 }
-                server.get("/index_js.js") { _, response ->
-                    handleRawResource(response, context, "text/javascript", R.raw.index_js)
+                server.get("/js") { _, response ->
+                    handleRawResource(response, context, "text/javascript", R.raw.script)
                 }
-
                 server.get("/api/settings") { _, response ->
                     handleGetSettings(response)
                 }
-
                 server.post("/api/settings") { request, response ->
                     handleSetSettings(request, response)
                 }
-
                 server.post("/api/upload/apk") { request, response ->
                     handleUploadApk(request, response, context)
                 }
 
                 HttpServer.showToast = showToast
-                log.i("服务已启动: 0.0.0.0:${SERVER_PORT}")
+                log.i("服务已启动：http://localhost:${SERVER_PORT}")
             } catch (ex: Exception) {
                 log.e("服务启动失败: ${ex.message}", ex)
                 launch(Dispatchers.Main) {
-                    Toast.makeText(context, "设置服务启动失败", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "HTTP Server 启动失败", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -108,7 +105,6 @@ object HttpServer : Loggable() {
             send(
                 Json.encodeToString(
                     AllSettings(
-                        appTitle = Constants.APP_TITLE,
                         appRepo = Constants.APP_REPO,
                         iptvSourceUrl = SP.iptvSourceUrl,
                         epgXmlUrl = SP.epgXmlUrl,
@@ -178,13 +174,12 @@ object HttpServer : Loggable() {
     }
 
     private fun getLocalIpAddress(): String {
-        val defaultIp = "0.0.0.0"
+        val defaultIp = "127.0.0.1"
 
         try {
             val en = NetworkInterface.getNetworkInterfaces()
             while (en.hasMoreElements()) {
-                val intf = en.nextElement()
-                val enumIpAddr = intf.inetAddresses
+                val enumIpAddr = en.nextElement().inetAddresses
                 while (enumIpAddr.hasMoreElements()) {
                     val inetAddress = enumIpAddr.nextElement()
                     if (!inetAddress.isLoopbackAddress && inetAddress is Inet4Address) {
@@ -194,7 +189,7 @@ object HttpServer : Loggable() {
             }
             return defaultIp
         } catch (ex: SocketException) {
-            log.e("IP Address: ${ex.message}", ex)
+            log.e("Get IP address failed: ${ex.message}", ex)
             return defaultIp
         }
     }
@@ -203,7 +198,6 @@ object HttpServer : Loggable() {
 @SuppressLint("UnsafeOptInUsageError")
 @Serializable
 private data class AllSettings(
-    val appTitle: String,
     val appRepo: String,
     val iptvSourceUrl: String,
     val epgXmlUrl: String,

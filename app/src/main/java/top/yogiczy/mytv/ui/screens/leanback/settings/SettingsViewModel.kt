@@ -10,13 +10,6 @@ import androidx.lifecycle.ViewModel
 import top.yogiczy.mytv.ui.utils.SP
 
 class LeanbackSettingsViewModel : ViewModel() {
-    private var _appBootLaunch by mutableStateOf(SP.appBootLaunch)
-    var appBootLaunch: Boolean
-        get() = _appBootLaunch
-        set(value) {
-            _appBootLaunch = value
-            SP.appBootLaunch = value
-        }
 
     private var _appLastLatestVersion by mutableStateOf(SP.appLastLatestVersion)
     var appLastLatestVersion: String

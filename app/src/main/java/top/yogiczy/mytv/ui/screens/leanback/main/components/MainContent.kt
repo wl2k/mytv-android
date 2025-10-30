@@ -112,6 +112,9 @@ fun LeanbackMainContent(
         LeanbackVideoScreen(
             state = videoPlayerState,
             showMetadataProvider = { settingsViewModel.debugShowVideoPlayerMetadata },
+            onError = {
+                mainContentState.changeCurrentIptvToNext()
+            },
             modifier = Modifier
                 .focusRequester(focusRequester)
                 .focusable()
@@ -281,7 +284,6 @@ fun LeanbackMainContent(
                 currentProgrammesProvider = { epgList.currentProgrammes(mainContentState.currentIptv) },
                 currentIptvChannelNoProvider = {
                     (iptvGroupList.iptvIdx(mainContentState.currentIptv) + 1).toString()
-                        .padStart(2, '0')
                 },
                 videoPlayerMetadataProvider = { videoPlayerState.metadata },
                 videoPlayerAspectRatioProvider = { videoPlayerState.aspectRatio },

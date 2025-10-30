@@ -57,7 +57,7 @@ fun LeanbackSettingsCategoryEpg(
     ) {
         item {
             LeanbackSettingsCategoryListItem(
-                headlineContent = "节目单启用",
+                headlineContent = "启用节目单",
                 supportingContent = "首次加载时可能会有跳帧风险",
                 trailingContent = {
                     Switch(checked = settingsViewModel.epgEnable, onCheckedChange = null)

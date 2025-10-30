@@ -79,7 +79,6 @@ fun LeanbackPanelScreen(
         LeanbackPanelScreenTopRight(
             channelNoProvider = {
                 (iptvGroupListProvider().iptvIdx(currentIptvProvider()) + 1).toString()
-                    .padStart(2, '0')
             }
         )
 
@@ -119,7 +118,7 @@ fun LeanbackPanelScreenTopRight(
         ) {
             LeanbackPanelChannelNo(channelNoProvider = channelNoProvider)
 
-            Box(modifier = Modifier.padding(horizontal = 8.dp)) {
+            Box(modifier = Modifier.padding(horizontal = 16.dp)) {
                 Spacer(
                     modifier = Modifier
                         .background(Color.White)
@@ -244,7 +243,7 @@ fun LeanbackPanelScreenBottomIptvList(
                         favoriteListVisible = true
                         onIptvFavoriteListVisibleChange(true)
                     } else {
-                        LeanbackToastState.I.showToast("没有收藏的频道")
+                        LeanbackToastState.I.showToast("无收藏")
                     }
                 },
                 onUserAction = onUserAction,
@@ -257,7 +256,7 @@ fun LeanbackPanelScreenBottomIptvList(
 private fun LeanbackPanelScreenTopRightPreview() {
     LeanbackTheme {
         LeanbackPanelScreenTopRight(
-            channelNoProvider = { "01" },
+            channelNoProvider = { "10" },
         )
     }
 }

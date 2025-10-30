@@ -10,12 +10,12 @@ import top.yogiczy.mytv.ui.theme.LeanbackTheme
 @Composable
 fun LeanbackPanelChannelNo(
     modifier: Modifier = Modifier,
-    channelNoProvider: () -> String = { "" },
+    channelNoProvider: () -> String,
 ) {
     Text(
         modifier = modifier,
         text = channelNoProvider(),
-        style = MaterialTheme.typography.displayMedium,
+        style = MaterialTheme.typography.displayLarge,
         color = MaterialTheme.colorScheme.onBackground,
     )
 }
@@ -25,7 +25,7 @@ fun LeanbackPanelChannelNo(
 private fun LeanbackPanelChannelNoPreview() {
     LeanbackTheme {
         LeanbackPanelChannelNo(
-            channelNoProvider = { "01" }
+            channelNoProvider = { "10" }
         )
     }
 }

@@ -24,8 +24,6 @@ fun LeanbackSettingsCategoryContent(
         Text(text = focusedCategory.title, style = MaterialTheme.typography.headlineSmall)
 
         when (focusedCategory) {
-            LeanbackSettingsCategories.ABOUT -> LeanbackSettingsCategoryAbout()
-            LeanbackSettingsCategories.APP -> LeanbackSettingsCategoryApp()
             LeanbackSettingsCategories.IPTV -> LeanbackSettingsCategoryIptv()
             LeanbackSettingsCategories.EPG -> LeanbackSettingsCategoryEpg()
             LeanbackSettingsCategories.UI -> LeanbackSettingsCategoryUI()
@@ -37,7 +35,8 @@ fun LeanbackSettingsCategoryContent(
             LeanbackSettingsCategories.LOG -> LeanbackSettingsCategoryLog(
                 history = Logger.history,
             )
-            LeanbackSettingsCategories.MORE -> LeanbackSettingsCategoryMore()
+
+            LeanbackSettingsCategories.ABOUT -> LeanbackSettingsCategoryAbout()
         }
     }
 }

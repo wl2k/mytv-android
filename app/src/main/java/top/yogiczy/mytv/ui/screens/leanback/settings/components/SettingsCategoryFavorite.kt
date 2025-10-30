@@ -25,7 +25,7 @@ fun LeanbackSettingsCategoryFavorite(
     ) {
         item {
             LeanbackSettingsCategoryListItem(
-                headlineContent = "收藏启用",
+                headlineContent = "启用收藏",
                 trailingContent = {
                     Switch(
                         checked = settingsViewModel.iptvChannelFavoriteEnable,

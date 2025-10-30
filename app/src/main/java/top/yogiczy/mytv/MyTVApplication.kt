@@ -7,7 +7,7 @@ class MyTVApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        UnsafeTrustManager.enableUnsafeTrustManager()
+        UnsafeTrustManager.enable()
         AppGlobal.cacheDir = applicationContext.cacheDir
         SP.init(applicationContext)
     }

@@ -5,10 +5,11 @@ import android.content.pm.PackageInfo
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.OpenInNew
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -18,15 +19,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.tv.foundation.lazy.list.TvLazyColumn
-import androidx.tv.material3.Icon
+import kotlinx.coroutines.delay
 import top.yogiczy.mytv.data.utils.Constants
-import top.yogiczy.mytv.ui.screens.leanback.components.LeanbackQrcodeDialog
+import top.yogiczy.mytv.ui.screens.leanback.components.LeanbackQrcode
 import top.yogiczy.mytv.ui.theme.LeanbackTheme
+import top.yogiczy.mytv.ui.utils.HttpServer
 
 @Composable
 fun LeanbackSettingsCategoryAbout(
     modifier: Modifier = Modifier,
     packageInfo: PackageInfo = rememberPackageInfo(),
+    serverUrl: String = HttpServer.serverUrl,
 ) {
     TvLazyColumn(
         modifier = modifier,
@@ -35,46 +38,45 @@ fun LeanbackSettingsCategoryAbout(
     ) {
         item {
             LeanbackSettingsCategoryListItem(
-                headlineContent = "应用名称",
-                trailingContent = Constants.APP_TITLE,
+                headlineContent = "版本",
+                trailingContent = packageInfo.versionName!!,
+            )
+        }
+        item {
+            LeanbackSettingsCategoryListItem(
+                headlineContent = "GitHub 仓库",
+                trailingContent = Constants.APP_REPO
             )
         }
 
         item {
             LeanbackSettingsCategoryListItem(
-                headlineContent = "应用版本",
-                trailingContent = packageInfo.versionName ?: "",
+                headlineContent = "HTTP",
+                trailingContent = serverUrl,
             )
         }
 
         item {
-            var showQrDialog by remember { mutableStateOf(false) }
+            var show by remember { mutableStateOf(false) }
 
-            LeanbackSettingsCategoryListItem(
-                headlineContent = "代码仓库",
-                trailingContent = {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(4.dp),
-                        verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
-                    ) {
-                        androidx.tv.material3.Text(Constants.APP_REPO)
+            LaunchedEffect(Unit) {
+                delay(100)
+                show = true
+            }
 
-                        Icon(
-                            Icons.AutoMirrored.Default.OpenInNew,
-                            contentDescription = null,
-                            modifier = Modifier.size(16.dp),
-                        )
-                    }
-                },
-                onSelected = { showQrDialog = true },
-            )
-
-            LeanbackQrcodeDialog(
-                text = Constants.APP_REPO,
-                description = "扫码前往代码仓库",
-                showDialogProvider = { showQrDialog },
-                onDismissRequest = { showQrDialog = false },
-            )
+            if (show) {
+                Row(
+                    horizontalArrangement = Arrangement.End,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    LeanbackQrcode(
+                        modifier = Modifier
+                            .width(200.dp)
+                            .height(200.dp),
+                        text = serverUrl,
+                    )
+                }
+            }
         }
     }
 }
@@ -83,14 +85,14 @@ fun LeanbackSettingsCategoryAbout(
 private fun rememberPackageInfo(context: Context = LocalContext.current): PackageInfo =
     context.packageManager.getPackageInfo(context.packageName, 0)
 
+
 @Preview
 @Composable
 private fun LeanbackSettingsAboutPreview() {
     LeanbackTheme {
         LeanbackSettingsCategoryAbout(
-            packageInfo = PackageInfo().apply {
-                versionName = "1.0.0"
-            }
+            packageInfo = PackageInfo().apply { versionName = "1.0.0" },
+            serverUrl = "http://127.0.0.1:10481",
         )
     }
 }

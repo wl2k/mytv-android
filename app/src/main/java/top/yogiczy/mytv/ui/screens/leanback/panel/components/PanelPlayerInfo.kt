@@ -1,6 +1,7 @@
 package top.yogiczy.mytv.ui.screens.leanback.panel.components
 
 import android.net.TrafficStats
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -90,6 +91,7 @@ private fun rememberNetSpeed(): Long {
         }
     }
 
+    Log.d("rememberNetSpeed", "netSpeed: $netSpeed")
     return netSpeed
 }
 

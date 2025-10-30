@@ -12,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Devices.TV_720p
 import androidx.compose.ui.tooling.preview.Preview
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
@@ -38,12 +39,12 @@ fun LeanbackPanelChannelNoSelectScreen(
     }
 }
 
-@Preview(device = "id:pixel_5")
+@Preview(device = TV_720p)
 @Composable
 private fun LeanbackPanelChannelNoSelectScreenPreview() {
     LeanbackTheme {
         LeanbackPanelChannelNoSelectScreen(
-            channelNoProvider = { "01" }
+            channelNoProvider = { "10" }
         )
     }
 }

@@ -3,7 +3,9 @@ package top.yogiczy.mytv.ui.screens.leanback.video
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -20,10 +22,10 @@ import top.yogiczy.mytv.ui.theme.LeanbackTheme
 fun LeanbackVideoPlayerErrorScreen(
     modifier: Modifier = Modifier,
     errorProvider: () -> String?,
+    countdownProvider: () -> Int = { 0 },
 ) {
     Box(modifier = modifier.fillMaxSize()) {
-        val error = errorProvider()
-        if (error != null) {
+        errorProvider()?.let {
             Column(
                 modifier = Modifier
                     .align(Alignment.Center)
@@ -41,9 +43,17 @@ fun LeanbackVideoPlayerErrorScreen(
                 )
 
                 Text(
-                    text = error,
+                    text = it,
                     style = MaterialTheme.typography.bodySmall,
                     color = LocalContentColor.current.copy(alpha = 0.8f),
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = "${countdownProvider()} 秒后切换到下一个频道...",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = LocalContentColor.current.copy(alpha = 0.6f),
                 )
             }
         }
@@ -55,7 +65,8 @@ fun LeanbackVideoPlayerErrorScreen(
 private fun LeanbackVideoPlayerErrorScreenPreview() {
     LeanbackTheme {
         LeanbackVideoPlayerErrorScreen(
-            errorProvider = { "ERROR_CODE_BEHIND_LIVE_WINDOW" }
+            errorProvider = { "ERROR_CODE_BEHIND_LIVE_WINDOW" },
+            countdownProvider = { 3 },
         )
     }
 }

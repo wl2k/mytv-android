@@ -28,17 +28,19 @@ class UnsafeTrustManager : X509TrustManager {
     }
 
     companion object {
-        fun enableUnsafeTrustManager() {
+        fun enable() {
             try {
                 val trustAllCerts = arrayOf<TrustManager>(UnsafeTrustManager())
                 val sslContext = SSLContext.getInstance("TLS")
                 sslContext.init(null, trustAllCerts, SecureRandom())
                 HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.socketFactory)
                 HttpsURLConnection.setDefaultHostnameVerifier { _, _ -> true }
-            } catch (e: NoSuchAlgorithmException) {
-                e.printStackTrace()
-            } catch (e: KeyManagementException) {
-                e.printStackTrace()
+            } catch (e: Exception) {
+                when (e) {
+                    is NoSuchAlgorithmException, is KeyManagementException -> {
+                        e.printStackTrace()
+                    }
+                }
             }
         }
     }

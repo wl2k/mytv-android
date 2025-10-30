@@ -62,7 +62,7 @@ class Logger private constructor(
 /**
  * 注入日志
  */
-abstract class Loggable(private val tag: String? = null) {
+abstract class Loggable() {
     protected val log: Logger
-        get() = Logger.create(tag ?: javaClass.simpleName)
+        get() = Logger.create(javaClass.simpleName)
 }

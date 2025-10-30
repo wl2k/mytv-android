@@ -39,7 +39,7 @@ fun LeanbackPanelTempScreen(
 
     Box(modifier = modifier.fillMaxSize()) {
         LeanbackPanelChannelNo(
-            channelNoProvider = { channelNoProvider().toString().padStart(2, '0') },
+            channelNoProvider = { channelNoProvider().toString() },
             modifier = Modifier
                 .padding(top = childPadding.top, end = childPadding.end)
                 .align(Alignment.TopEnd),

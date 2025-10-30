@@ -5,19 +5,14 @@ package top.yogiczy.mytv.data.utils
  */
 object Constants {
     /**
-     * 应用 标题
-     */
-    const val APP_TITLE = "我的电视"
-
-    /**
      * 应用 代码仓库
      */
-    const val APP_REPO = "https://github.com/yaoxieyoulei/mytv-android"
+    const val APP_REPO = "https://github.com/wl2k/mytv-android"
 
     /**
      * IPTV源地址
      */
-    const val IPTV_SOURCE_URL = "http://1.2.3.4/live.m3u"
+    const val IPTV_SOURCE_URL = "http://127.0.0.1/live.m3u"
 
     /**
      * IPTV源缓存时间（毫秒）
@@ -27,23 +22,12 @@ object Constants {
     /**
      * 节目单XML地址
      */
-    const val EPG_XML_URL = "http://epg.51zmt.top:8000/e.xml.gz"
+    const val EPG_XML_URL = "https://epg.112114.xyz/pp.xml.gz"
 
     /**
      * 节目单刷新时间阈值（小时）
      */
     const val EPG_REFRESH_TIME_THRESHOLD = 2 // 不到2点不刷新
-
-    /**
-     * Git最新版本信息
-     */
-    const val GIT_RELEASE_LATEST_URL =
-        "https://api.github.com/repos/yaoxieyoulei/mytv-android/releases/latest"
-
-    /**
-     * GitHub加速代理地址
-     */
-    const val GITHUB_PROXY = "https://mirror.ghproxy.com/"
 
     /**
      * HTTP请求重试次数
@@ -58,7 +42,7 @@ object Constants {
     /**
      * 播放器 userAgent
      */
-    const val VIDEO_PLAYER_USER_AGENT = "ExoPlayer"
+    const val VIDEO_PLAYER_USER_AGENT = "okhttp/3"
 
     /**
      * 日志历史最大保留条数
@@ -68,7 +52,7 @@ object Constants {
     /**
      * 播放器加载超时
      */
-    const val VIDEO_PLAYER_LOAD_TIMEOUT = 1000L * 15 // 15秒
+    const val VIDEO_PLAYER_LOAD_TIMEOUT = 1000L * 5 // 5秒
 
     /**
      * 界面 超时未操作自动关闭界面
