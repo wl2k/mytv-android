@@ -156,7 +156,7 @@ object HttpServer : Loggable() {
                 body.setDataCallback { _, bb ->
                     val byteArray = bb.allByteArray
                     hasReceived += byteArray.size
-                    showToast("正在接收文件: ${(hasReceived * 100f / contentLength).toInt()}%")
+                    showToast("正在接收 APK: ${(hasReceived * 100f / contentLength).toInt()}%")
                     os.write(byteArray)
                 }
             }

@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.tooling.preview.Devices.TV_720p
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -79,7 +80,7 @@ private fun LeanbackMainScreenLoading(messageProvider: () -> String?) {
                 .padding(start = childPadding.start, bottom = childPadding.bottom),
         ) {
             Text(
-                text = "加载中...",
+                text = "正在加载...",
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onBackground,
             )
@@ -89,7 +90,7 @@ private fun LeanbackMainScreenLoading(messageProvider: () -> String?) {
                 Text(
                     text = message,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f),
+                    color = MaterialTheme.colorScheme.secondary,
                     modifier = Modifier.sizeIn(maxWidth = 500.dp),
                 )
             }
@@ -97,11 +98,11 @@ private fun LeanbackMainScreenLoading(messageProvider: () -> String?) {
     }
 }
 
-@Preview(device = "id:pixel_5")
+@Preview(device = TV_720p)
 @Composable
 private fun LeanbackMainScreenLoadingPreview() {
     LeanbackTheme {
-        LeanbackMainScreenLoading { "获取远程直播源(2/10)..." }
+        LeanbackMainScreenLoading { "获取直播源（重试：2/10）..." }
     }
 }
 
@@ -129,7 +130,7 @@ private fun LeanbackMainScreenError(
                 Text(
                     text = message,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.error.copy(alpha = 0.8f),
+                    color = MaterialTheme.colorScheme.secondary,
                     modifier = Modifier.sizeIn(maxWidth = 500.dp),
                 )
             }
@@ -137,7 +138,7 @@ private fun LeanbackMainScreenError(
 
         Box(
             modifier = Modifier
-                .align(Alignment.BottomEnd)
+                .align(Alignment.Center)
                 .padding(end = childPadding.end, bottom = childPadding.bottom)
                 .width(100.dp)
                 .height(100.dp)
@@ -170,7 +171,7 @@ private fun LeanbackMainScreenErrorPreview() {
     LeanbackTheme {
         LeanbackMainScreenError(
             { "获取远程直播源失败，请检查网络连接" },
-            "http://244.178.44.111:8080",
+            "http://127.0.0.1:8080",
         )
     }
 }
@@ -181,7 +182,7 @@ private fun LeanbackMainScreenErrorLongPreview() {
     LeanbackTheme {
         LeanbackMainScreenError(
             { "Caused by: androidx.media3.datasource.HttpDataSource\$HttpDataSourceException:" + " java.io.IOException: unexpected end of stream on com.android.okhttp.Address@2f10c24d" },
-            "http://244.178.44.111:8080",
+            "http://127.0.0.1:8080",
         )
     }
 }

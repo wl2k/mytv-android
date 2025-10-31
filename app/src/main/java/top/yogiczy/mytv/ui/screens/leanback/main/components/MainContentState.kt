@@ -79,7 +79,7 @@ class LeanbackMainContentState(
             }
 
             // 记忆可播放的域名
-            SP.iptvPlayableHostList += getUrlHost(_currentIptv.urlList[_currentIptvUrlIdx])
+            SP.iptvPlayableHostList += getHostFrom(_currentIptv.urlList[_currentIptvUrlIdx])
         }
 
         videoPlayerState.onError {
@@ -88,7 +88,7 @@ class LeanbackMainContentState(
             }
 
             // 从记忆中删除不可播放的域名
-            SP.iptvPlayableHostList -= getUrlHost(_currentIptv.urlList[_currentIptvUrlIdx])
+            SP.iptvPlayableHostList -= getHostFrom(_currentIptv.urlList[_currentIptvUrlIdx])
         }
 
         videoPlayerState.onCutoff {
@@ -117,7 +117,7 @@ class LeanbackMainContentState(
         if (iptv == _currentIptv && urlIdx == null) return
 
         if (iptv == _currentIptv && urlIdx != _currentIptvUrlIdx) {
-            SP.iptvPlayableHostList -= getUrlHost(_currentIptv.urlList[_currentIptvUrlIdx])
+            SP.iptvPlayableHostList -= getHostFrom(_currentIptv.urlList[_currentIptvUrlIdx])
         }
 
         _isTempPanelVisible = true
@@ -128,14 +128,14 @@ class LeanbackMainContentState(
         _currentIptvUrlIdx = if (urlIdx == null) {
             // 优先从记忆中选择可播放的域名
             max(0, _currentIptv.urlList.indexOfFirst {
-                SP.iptvPlayableHostList.contains(getUrlHost(it))
+                SP.iptvPlayableHostList.contains(getHostFrom(it))
             })
         } else {
             (urlIdx + _currentIptv.urlList.size) % _currentIptv.urlList.size
         }
 
         val url = iptv.urlList[_currentIptvUrlIdx]
-        log.d("播放${iptv.name}（${_currentIptvUrlIdx + 1}/${_currentIptv.urlList.size}）: $url")
+        log.d("播放${iptv.name} (${_currentIptvUrlIdx + 1}/${_currentIptv.urlList.size}): $url")
 
         videoPlayerState.prepare(url)
     }
@@ -162,6 +162,6 @@ fun rememberLeanbackMainContentState(
     )
 }
 
-private fun getUrlHost(url: String): String {
-    return url.split("://").getOrElse(1) { "" }.split("/").firstOrNull() ?: url
+private fun getHostFrom(url: String): String {
+    return url.split("://").getOrElse(1) { url }
 }

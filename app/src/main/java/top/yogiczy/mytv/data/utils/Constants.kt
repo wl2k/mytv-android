@@ -12,7 +12,7 @@ object Constants {
     /**
      * IPTV源地址
      */
-    const val IPTV_SOURCE_URL = "http://127.0.0.1/live.m3u"
+    const val IPTV_SOURCE_URL = "http://192.0.2.1/live.m3u"
 
     /**
      * IPTV源缓存时间（毫秒）
@@ -40,9 +40,9 @@ object Constants {
     const val HTTP_RETRY_INTERVAL = 3000L
 
     /**
-     * 播放器 userAgent
+     * 播放器 user-agent
      */
-    const val VIDEO_PLAYER_USER_AGENT = "okhttp/3"
+    const val VIDEO_PLAYER_USER_AGENT = "okhttp/${okhttp3.OkHttp.VERSION}"
 
     /**
      * 日志历史最大保留条数

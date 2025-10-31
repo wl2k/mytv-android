@@ -16,13 +16,13 @@ object ApkInstaller {
             val cacheDir = context.cacheDir
             val cachedApkFile = File(cacheDir, file.name).apply {
                 writeBytes(file.readBytes())
-                // 解决Android6 无法解析安装包
+                // 解决 Android 6 无法解析安装包
                 setReadable(true, false)
             }
 
             val uri =
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) FileProvider.getUriForFile(
-                    context, context.packageName + ".FileProvider", cachedApkFile
+                    context, "${context.packageName}.FileProvider", cachedApkFile
                 )
                 else Uri.fromFile(cachedApkFile)
 
@@ -30,6 +30,7 @@ object ApkInstaller {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
                 setDataAndType(uri, "application/vnd.android.package-archive")
             }
+
 
             context.startActivity(installIntent)
         }

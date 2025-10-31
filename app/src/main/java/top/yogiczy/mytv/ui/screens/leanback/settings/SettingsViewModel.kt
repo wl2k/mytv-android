@@ -10,23 +10,6 @@ import androidx.lifecycle.ViewModel
 import top.yogiczy.mytv.ui.utils.SP
 
 class LeanbackSettingsViewModel : ViewModel() {
-
-    private var _appLastLatestVersion by mutableStateOf(SP.appLastLatestVersion)
-    var appLastLatestVersion: String
-        get() = _appLastLatestVersion
-        set(value) {
-            _appLastLatestVersion = value
-            SP.appLastLatestVersion = value
-        }
-
-    private var _appDeviceDisplayType by mutableStateOf(SP.appDeviceDisplayType)
-    var appDeviceDisplayType: SP.AppDeviceDisplayType
-        get() = _appDeviceDisplayType
-        set(value) {
-            _appDeviceDisplayType = value
-            SP.appDeviceDisplayType = value
-        }
-
     private var _debugShowFps by mutableStateOf(SP.debugShowFps)
     var debugShowFps: Boolean
         get() = _debugShowFps
@@ -41,14 +24,6 @@ class LeanbackSettingsViewModel : ViewModel() {
         set(value) {
             _debugShowVideoPlayerMetadata = value
             SP.debugShowVideoPlayerMetadata = value
-        }
-
-    private var _iptvLastIptvIdx by mutableIntStateOf(SP.iptvLastIptvIdx)
-    var iptvLastIptvIdx: Int
-        get() = _iptvLastIptvIdx
-        set(value) {
-            _iptvLastIptvIdx = value
-            SP.iptvLastIptvIdx = value
         }
 
     private var _iptvChannelChangeFlip by mutableStateOf(SP.iptvChannelChangeFlip)

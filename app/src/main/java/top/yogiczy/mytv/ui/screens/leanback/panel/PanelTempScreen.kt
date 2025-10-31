@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.tooling.preview.Devices.TV_720p
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
@@ -22,7 +23,6 @@ import top.yogiczy.mytv.data.entities.EpgProgramme.Companion.progress
 import top.yogiczy.mytv.data.entities.EpgProgrammeCurrent
 import top.yogiczy.mytv.data.entities.Iptv
 import top.yogiczy.mytv.ui.rememberLeanbackChildPadding
-import top.yogiczy.mytv.ui.screens.leanback.panel.components.LeanbackPanelChannelNo
 import top.yogiczy.mytv.ui.screens.leanback.panel.components.LeanbackPanelIptvInfo
 import top.yogiczy.mytv.ui.theme.LeanbackTheme
 
@@ -38,11 +38,8 @@ fun LeanbackPanelTempScreen(
     val childPadding = rememberLeanbackChildPadding()
 
     Box(modifier = modifier.fillMaxSize()) {
-        LeanbackPanelChannelNo(
+        LeanbackPanelScreenTopRight(
             channelNoProvider = { channelNoProvider().toString() },
-            modifier = Modifier
-                .padding(top = childPadding.top, end = childPadding.end)
-                .align(Alignment.TopEnd),
         )
 
         Layout(
@@ -52,6 +49,7 @@ fun LeanbackPanelTempScreen(
                         .layoutId("info")
                         .padding(horizontal = 16.dp, vertical = 8.dp)
                         .sizeIn(maxWidth = 400.dp),
+                    channelNoProvider = { channelNoProvider().toString() },
                     iptvProvider = currentIptvProvider,
                     iptvUrlIdxProvider = currentIptvUrlIdxProvider,
                     currentProgrammesProvider = currentProgrammesProvider,
@@ -95,7 +93,7 @@ fun LeanbackPanelTempScreen(
     }
 }
 
-@Preview(device = "id:pixel_5")
+@Preview(device = TV_720p)
 @Composable
 private fun LeanbackPanelTempScreenPreview() {
     LeanbackTheme {

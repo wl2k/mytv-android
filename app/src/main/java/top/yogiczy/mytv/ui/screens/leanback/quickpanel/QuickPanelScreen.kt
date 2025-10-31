@@ -210,6 +210,7 @@ private fun LeanbackQuickPanelActionVideoAspectRatio(
                 when (videoPlayerAspectRatioProvider()) {
                     16f / 9f -> 4f / 3f
                     4f / 3f -> screenAspectRatio
+                    screenAspectRatio -> 16f / 9f
                     else -> 16f / 9f
                 }
             )
@@ -222,6 +223,7 @@ private fun LeanbackQuickPanelActionVideoAspectRatio(
 private fun LeanbackQuickPanelScreenPreview() {
     LeanbackTheme {
         LeanbackQuickPanelScreen(
+            currentIptvChannelNoProvider = { "1" },
             currentIptvProvider = { Iptv.EXAMPLE },
             currentProgrammesProvider = { EpgProgrammeCurrent.EXAMPLE },
             videoPlayerMetadataProvider = {

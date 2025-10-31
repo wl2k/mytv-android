@@ -281,4 +281,4 @@ private fun LeanbackClassicPanelScreenPreview() {
     }
 }
 
-val LeanbackClassicPanelScreenFavoriteIptvGroup = IptvGroup(name = "我的收藏")
+val LeanbackClassicPanelScreenFavoriteIptvGroup = IptvGroup(name = "收藏")

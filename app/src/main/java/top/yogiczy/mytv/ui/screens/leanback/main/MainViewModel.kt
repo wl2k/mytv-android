@@ -49,7 +49,7 @@ class LeanbackMainViewModel : ViewModel() {
                 if (attempt >= Constants.HTTP_RETRY_COUNT) return@retryWhen false
 
                 _uiState.value =
-                    LeanbackMainUiState.Loading("获取远程直播源(${attempt + 1}/${Constants.HTTP_RETRY_COUNT})...")
+                    LeanbackMainUiState.Loading("获取远程直播源（重试：${attempt + 1}/${Constants.HTTP_RETRY_COUNT}）...")
                 delay(Constants.HTTP_RETRY_INTERVAL)
                 true
             }
