@@ -50,7 +50,7 @@ fun LeanbackSettingsCategoryAbout(
         }
         item {
             LeanbackSettingsCategoryListItem(
-                headlineContent = "HTTP",
+                headlineContent = "设置页面",
                 trailingContent = serverUrl,
             )
         }
@@ -73,8 +73,8 @@ fun LeanbackSettingsCategoryAbout(
                 ) {
                     LeanbackQrcode(
                         modifier = Modifier
-                            .width(200.dp)
-                            .height(200.dp),
+                            .width(128.dp)
+                            .height(128.dp),
                         text = serverUrl,
                     )
                 }

@@ -27,12 +27,6 @@ import androidx.compose.ui.tooling.preview.Devices.TV_720p
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import io.github.alexzhirkevich.qrose.options.QrBallShape
-import io.github.alexzhirkevich.qrose.options.QrFrameShape
-import io.github.alexzhirkevich.qrose.options.QrPixelShape
-import io.github.alexzhirkevich.qrose.options.QrShapes
-import io.github.alexzhirkevich.qrose.options.circle
-import io.github.alexzhirkevich.qrose.options.roundCorners
 import io.github.alexzhirkevich.qrose.rememberQrCodePainter
 import top.yogiczy.mytv.ui.rememberLeanbackChildPadding
 import top.yogiczy.mytv.ui.screens.leanback.components.LeanbackVisible
@@ -70,7 +64,10 @@ fun LeanbackMainScreen(
 }
 
 @Composable
-private fun LeanbackMainScreenLoading(messageProvider: () -> String?) {
+private fun LeanbackMainScreenLoading(
+    serverUrl: String = HttpServer.serverUrl,
+    messageProvider: () -> String?
+) {
     val childPadding = rememberLeanbackChildPadding()
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -85,13 +82,17 @@ private fun LeanbackMainScreenLoading(messageProvider: () -> String?) {
                 color = MaterialTheme.colorScheme.onBackground,
             )
 
-            val message = messageProvider()
-            if (message != null) {
+            messageProvider()?.let {
                 Text(
-                    text = message,
-                    style = MaterialTheme.typography.bodySmall,
+                    text = it,
+                    style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.secondary,
                     modifier = Modifier.sizeIn(maxWidth = 500.dp),
+                )
+                Text(
+                    text = "设置页面：$serverUrl",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.secondary.copy(alpha = .8f)
                 )
             }
         }
@@ -149,16 +150,8 @@ private fun LeanbackMainScreenError(
         ) {
             Image(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(6.dp),
-                painter = rememberQrCodePainter(
-                    data = serverUrl,
-                    shapes = QrShapes(
-                        ball = QrBallShape.circle(),
-                        darkPixel = QrPixelShape.roundCorners(),
-                        frame = QrFrameShape.roundCorners(.25f),
-                    ),
-                ),
+                    .padding(8.dp),
+                painter = rememberQrCodePainter(serverUrl),
                 contentDescription = serverUrl,
             )
         }

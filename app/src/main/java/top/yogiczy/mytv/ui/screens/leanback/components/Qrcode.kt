@@ -3,6 +3,8 @@ package top.yogiczy.mytv.ui.screens.leanback.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -13,15 +15,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
-import io.github.alexzhirkevich.qrose.options.QrBallShape
-import io.github.alexzhirkevich.qrose.options.QrFrameShape
-import io.github.alexzhirkevich.qrose.options.QrPixelShape
-import io.github.alexzhirkevich.qrose.options.QrShapes
-import io.github.alexzhirkevich.qrose.options.circle
-import io.github.alexzhirkevich.qrose.options.roundCorners
 import io.github.alexzhirkevich.qrose.rememberQrCodePainter
+import top.yogiczy.mytv.ui.theme.LeanbackTheme
 
 @Composable
 fun LeanbackQrcode(
@@ -39,14 +37,9 @@ fun LeanbackQrcode(
             modifier = Modifier
                 .fillMaxSize()
                 .align(Alignment.Center)
-                .padding(10.dp),
+                .padding(8.dp),
             painter = rememberQrCodePainter(
-                data = text,
-                shapes = QrShapes(
-                    ball = QrBallShape.circle(),
-                    darkPixel = QrPixelShape.roundCorners(),
-                    frame = QrFrameShape.roundCorners(.25f),
-                ),
+                text
             ),
             contentDescription = text,
         )
@@ -68,13 +61,33 @@ fun LeanbackQrcodeDialog(
             onDismissRequest = onDismissRequest,
             confirmButton = { description?.let { Text(text = description) } },
             text = {
-                LeanbackQrcode(
-                    text = text,
-                    modifier = Modifier
-                        .width(240.dp)
-                        .height(240.dp),
-                )
+                Column {
+                    LeanbackQrcode(
+                        text = text,
+                        modifier = Modifier
+                            .width(240.dp)
+                            .height(240.dp),
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = text,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                    )
+                }
             },
+        )
+    }
+}
+
+@Preview
+@Composable
+fun LeanbackQrcodeDialogPreview() {
+    LeanbackTheme {
+        LeanbackQrcodeDialog(
+            text = "http://localhost:10481",
+            showDialogProvider = { true }
         )
     }
 }
