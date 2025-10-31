@@ -6,6 +6,9 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.AlertDialog
@@ -27,9 +30,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.tv.foundation.lazy.list.TvLazyColumn
-import androidx.tv.foundation.lazy.list.itemsIndexed
-import androidx.tv.foundation.lazy.list.rememberTvLazyListState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.withContext
@@ -59,12 +59,13 @@ fun LeanbackQuickPanelIptvChannelsDialog(
         AlertDialog(
             modifier = modifier,
             onDismissRequest = onDismissRequest,
-            confirmButton = { Text(text = "短按切换线路") },
+            confirmButton = { Text(text = "单击切换线路") },
             title = { Text(text = iptv.name) },
             text = {
                 var hasFocused by remember { mutableStateOf(false) }
 
-                val listState = rememberTvLazyListState(max(0, iptvUrlIdx - 2))
+                val listState =
+                    rememberLazyListState(max(0, iptvUrlIdx - 2))
 
                 LaunchedEffect(listState) {
                     snapshotFlow { listState.isScrollInProgress }
@@ -72,10 +73,10 @@ fun LeanbackQuickPanelIptvChannelsDialog(
                         .collect { _ -> onUserAction() }
                 }
 
-                TvLazyColumn(
+                LazyColumn(
                     state = listState,
                     contentPadding = PaddingValues(vertical = 4.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     itemsIndexed(iptv.urlList) { index, url ->
                         val focusRequester = remember { FocusRequester() }
@@ -134,7 +135,7 @@ private fun LeanbackQuickPanelIptvChannelItem(
                 horizontalArrangement = Arrangement.spacedBy(6.dp),
                 verticalAlignment = Alignment.Bottom,
             ) {
-                androidx.tv.material3.Text(text = "线路${urlIndex + 1}")
+                androidx.tv.material3.Text(text = "线路 ${urlIndex + 1}")
 
                 Row(
                     modifier = Modifier.padding(bottom = 2.dp),

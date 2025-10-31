@@ -3,7 +3,9 @@ package top.yogiczy.mytv.ui.screens.leanback.settings.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.AlertDialog
@@ -20,26 +22,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.tv.foundation.lazy.list.TvLazyColumn
-import androidx.tv.foundation.lazy.list.TvLazyListState
-import androidx.tv.foundation.lazy.list.items
+import androidx.tv.material3.Icon
+import androidx.tv.material3.ListItem
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
+import top.yogiczy.mytv.AppGlobal
 import top.yogiczy.mytv.data.repositories.iptv.IptvRepository
 import top.yogiczy.mytv.data.utils.Constants
 import top.yogiczy.mytv.ui.screens.leanback.components.LeanbackQrcodeDialog
 import top.yogiczy.mytv.ui.screens.leanback.settings.LeanbackSettingsViewModel
-import top.yogiczy.mytv.ui.screens.leanback.toast.LeanbackToastState
-import top.yogiczy.mytv.ui.theme.LeanbackTheme
+import top.yogiczy.mytv.ui.screens.leanback.toast.Toaster
 import top.yogiczy.mytv.ui.utils.HttpServer
-import top.yogiczy.mytv.ui.utils.SP
 import top.yogiczy.mytv.ui.utils.handleLeanbackKeyEvents
 import top.yogiczy.mytv.utils.humanizeMs
 import kotlin.math.max
@@ -51,7 +49,7 @@ fun LeanbackSettingsCategoryIptv(
 ) {
     val coroutineScope = rememberCoroutineScope()
 
-    TvLazyColumn(
+    LazyColumn(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(10.dp),
         contentPadding = PaddingValues(vertical = 10.dp),
@@ -72,7 +70,6 @@ fun LeanbackSettingsCategoryIptv(
                 },
             )
         }
-
         item {
             LeanbackSettingsCategoryListItem(
                 headlineContent = "换台反转",
@@ -90,7 +87,6 @@ fun LeanbackSettingsCategoryIptv(
                 },
             )
         }
-
         item {
             LeanbackSettingsCategoryListItem(
                 headlineContent = "直播源精简",
@@ -103,7 +99,6 @@ fun LeanbackSettingsCategoryIptv(
                 },
             )
         }
-
         item {
             LeanbackSettingsCategoryListItem(
                 headlineContent = "直播源缓存时间",
@@ -118,9 +113,12 @@ fun LeanbackSettingsCategoryIptv(
                 },
             )
         }
-
         item {
-            var showDialog by remember { mutableStateOf(false) }
+            var showDialog by remember {
+                mutableStateOf(
+                    false
+                )
+            }
 
             LeanbackSettingsCategoryListItem(
                 headlineContent = "自定义直播源",
@@ -130,7 +128,8 @@ fun LeanbackSettingsCategoryIptv(
                 remoteConfig = true,
             )
 
-            LeanbackSettingsIptvSourceHistoryDialog(showDialogProvider = { showDialog },
+            LeanbackSettingsIptvSourceHistoryDialog(
+                showDialogProvider = { showDialog },
                 onDismissRequest = { showDialog = false },
                 iptvSourceHistoryProvider = {
                     settingsViewModel.iptvSourceUrlHistoryList.filter {
@@ -149,15 +148,17 @@ fun LeanbackSettingsCategoryIptv(
                     settingsViewModel.iptvSourceUrlHistoryList -= it
                 })
         }
-
         item {
             LeanbackSettingsCategoryListItem(
                 headlineContent = "清除缓存",
                 supportingContent = "短按清除直播源缓存文件、可播放域名列表",
                 onSelected = {
                     settingsViewModel.iptvPlayableHostList = emptySet()
-                    coroutineScope.launch { IptvRepository().clearCache() }
-                    LeanbackToastState.I.showToast("清除缓存成功")
+                    coroutineScope.launch {
+                        IptvRepository().clearCache()
+                        AppGlobal.cacheDir.deleteRecursively()
+                    }
+                    Toaster.show("清除缓存成功")
                 },
             )
         }
@@ -187,16 +188,23 @@ private fun LeanbackSettingsIptvSourceHistoryDialog(
             text = {
                 var hasFocused by remember { mutableStateOf(false) }
 
-                TvLazyColumn(
-                    state = TvLazyListState(
-                        max(0, iptvSourceHistory.indexOf(currentIptvSource) - 2),
-                    ),
+                LazyListState(
+                    max(
+                        0,
+                        iptvSourceHistory.indexOf(currentIptvSource) - 2
+                    )
+                )
+                LazyColumn(
                     contentPadding = PaddingValues(vertical = 4.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     items(iptvSourceHistory) { source ->
                         val focusRequester = remember { FocusRequester() }
-                        var isFocused by remember { mutableStateOf(false) }
+                        var isFocused by remember {
+                            mutableStateOf(
+                                false
+                            )
+                        }
 
                         LaunchedEffect(Unit) {
                             if (source == currentIptvSource && !hasFocused) {
@@ -205,7 +213,7 @@ private fun LeanbackSettingsIptvSourceHistoryDialog(
                             }
                         }
 
-                        androidx.tv.material3.ListItem(
+                        ListItem(
                             modifier = Modifier
                                 .focusRequester(focusRequester)
                                 .onFocusChanged { isFocused = it.isFocused || it.hasFocus }
@@ -230,7 +238,7 @@ private fun LeanbackSettingsIptvSourceHistoryDialog(
                             },
                             trailingContent = {
                                 if (currentIptvSource == source) {
-                                    androidx.tv.material3.Icon(
+                                    Icon(
                                         Icons.Default.CheckCircle,
                                         contentDescription = "checked",
                                     )
@@ -238,13 +246,20 @@ private fun LeanbackSettingsIptvSourceHistoryDialog(
                             },
                         )
                     }
-
                     item {
                         val focusRequester = remember { FocusRequester() }
-                        var isFocused by remember { mutableStateOf(false) }
-                        var showDialog by remember { mutableStateOf(false) }
+                        var isFocused by remember {
+                            mutableStateOf(
+                                false
+                            )
+                        }
+                        var showDialog by remember {
+                            mutableStateOf(
+                                false
+                            )
+                        }
 
-                        androidx.tv.material3.ListItem(
+                        ListItem(
                             modifier = Modifier
                                 .focusRequester(focusRequester)
                                 .onFocusChanged { isFocused = it.isFocused || it.hasFocus }
@@ -269,26 +284,6 @@ private fun LeanbackSettingsIptvSourceHistoryDialog(
                         )
                     }
                 }
-            },
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun LeanbackSettingsCategoryIptvPreview() {
-    SP.init(LocalContext.current)
-    LeanbackTheme {
-        LeanbackSettingsCategoryIptv(
-            modifier = Modifier.padding(20.dp),
-            settingsViewModel = LeanbackSettingsViewModel().apply {
-                iptvSourceCacheTime = 3_600_000
-                iptvSourceUrl = "https://iptv-org.github.io/iptv/iptv.m3u"
-                iptvSourceUrlHistoryList = setOf(
-                    "https://iptv-org.github.io/iptv/iptv.m3u",
-                    "https://iptv-org.github.io/iptv/iptv2.m3u",
-                    "https://iptv-org.github.io/iptv/iptv3.m3u",
-                )
             },
         )
     }

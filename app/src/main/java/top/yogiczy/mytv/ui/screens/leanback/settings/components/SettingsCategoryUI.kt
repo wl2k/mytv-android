@@ -2,18 +2,14 @@ package top.yogiczy.mytv.ui.screens.leanback.settings.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.tv.foundation.lazy.list.TvLazyColumn
 import top.yogiczy.mytv.data.utils.Constants
 import top.yogiczy.mytv.ui.screens.leanback.settings.LeanbackSettingsViewModel
-import top.yogiczy.mytv.ui.theme.LeanbackTheme
 import top.yogiczy.mytv.ui.utils.SP
 import top.yogiczy.mytv.utils.humanizeMs
 import java.text.DecimalFormat
@@ -23,10 +19,10 @@ fun LeanbackSettingsCategoryUI(
     modifier: Modifier = Modifier,
     settingsViewModel: LeanbackSettingsViewModel = viewModel(),
 ) {
-    TvLazyColumn(
+    LazyColumn(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(10.dp),
         contentPadding = PaddingValues(vertical = 10.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         item {
             LeanbackSettingsCategoryListItem(
@@ -44,7 +40,6 @@ fun LeanbackSettingsCategoryUI(
                 },
             )
         }
-
         item {
             LeanbackSettingsCategoryListItem(
                 headlineContent = "经典选台界面",
@@ -61,7 +56,6 @@ fun LeanbackSettingsCategoryUI(
                 },
             )
         }
-
         item {
             val timeShowRangeSeconds = Constants.UI_TIME_SHOW_RANGE / 1000
 
@@ -81,11 +75,14 @@ fun LeanbackSettingsCategoryUI(
                 },
                 onSelected = {
                     settingsViewModel.uiTimeShowMode =
-                        SP.UiTimeShowMode.entries.let { it[(it.indexOf(settingsViewModel.uiTimeShowMode) + 1) % it.size] }
+                        SP.UiTimeShowMode.entries.let {
+                            it[(it.indexOf(
+                                settingsViewModel.uiTimeShowMode
+                            ) + 1) % it.size]
+                        }
                 },
             )
         }
-
         item {
             LeanbackSettingsCategoryListItem(
                 headlineContent = "画中画模式",
@@ -101,7 +98,6 @@ fun LeanbackSettingsCategoryUI(
                 },
             )
         }
-
         item {
             LeanbackSettingsCategoryListItem(
                 headlineContent = "超时自动关闭界面",
@@ -110,7 +106,6 @@ fun LeanbackSettingsCategoryUI(
                 locK = true,
             )
         }
-
         item {
             val defaultScale = 1f
             val minScale = 1f
@@ -136,7 +131,6 @@ fun LeanbackSettingsCategoryUI(
                 },
             )
         }
-
         item {
             val defaultScale = 1f
             val minScale = 1f
@@ -162,17 +156,5 @@ fun LeanbackSettingsCategoryUI(
                 },
             )
         }
-    }
-}
-
-@Preview
-@Composable
-private fun LeanbackSettingsCategoryUIPreview() {
-    SP.init(LocalContext.current)
-    LeanbackTheme {
-        LeanbackSettingsCategoryUI(
-            modifier = Modifier.padding(20.dp),
-            settingsViewModel = LeanbackSettingsViewModel(),
-        )
     }
 }

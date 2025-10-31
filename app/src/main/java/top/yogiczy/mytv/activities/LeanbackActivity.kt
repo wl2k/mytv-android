@@ -17,7 +17,6 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import top.yogiczy.mytv.ui.LeanbackApp
-import top.yogiczy.mytv.ui.screens.leanback.toast.LeanbackToastState
 import top.yogiczy.mytv.ui.theme.LeanbackTheme
 import top.yogiczy.mytv.ui.utils.HttpServer
 import top.yogiczy.mytv.ui.utils.SP
@@ -68,8 +67,6 @@ class LeanbackActivity : ComponentActivity() {
             }
         }
 
-        HttpServer.start(applicationContext, showToast = {
-            LeanbackToastState.I.showToast(it, id = "httpServer")
-        })
+        HttpServer.start(applicationContext)
     }
 }

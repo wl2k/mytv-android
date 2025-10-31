@@ -10,27 +10,21 @@ import java.io.File
 
 object ApkInstaller {
     @SuppressLint("SetWorldReadable")
-    fun installApk(context: Context, filePath: String) {
-        val file = File(filePath)
+    fun installApk(context: Context, file: File) {
         if (file.exists()) {
-            val cacheDir = context.cacheDir
-            val cachedApkFile = File(cacheDir, file.name).apply {
-                writeBytes(file.readBytes())
-                // 解决 Android 6 无法解析安装包
-                setReadable(true, false)
-            }
+            // 解决 Android 6 无法解析安装包
+            file.setReadable(true, false)
 
             val uri =
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) FileProvider.getUriForFile(
-                    context, "${context.packageName}.FileProvider", cachedApkFile
+                    context, "${context.packageName}.FileProvider", file
                 )
-                else Uri.fromFile(cachedApkFile)
+                else Uri.fromFile(file)
 
             val installIntent = Intent(Intent.ACTION_VIEW).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
                 setDataAndType(uri, "application/vnd.android.package-archive")
             }
-
 
             context.startActivity(installIntent)
         }

@@ -38,7 +38,7 @@ import top.yogiczy.mytv.ui.screens.leanback.panel.components.LeanbackPanelIptvFa
 import top.yogiczy.mytv.ui.screens.leanback.panel.components.LeanbackPanelIptvGroupList
 import top.yogiczy.mytv.ui.screens.leanback.panel.components.LeanbackPanelIptvInfo
 import top.yogiczy.mytv.ui.screens.leanback.panel.components.LeanbackPanelPlayerInfo
-import top.yogiczy.mytv.ui.screens.leanback.toast.LeanbackToastState
+import top.yogiczy.mytv.ui.screens.leanback.toast.Toaster
 import top.yogiczy.mytv.ui.screens.leanback.video.player.LeanbackVideoPlayer
 import top.yogiczy.mytv.ui.theme.LeanbackTheme
 
@@ -235,7 +235,7 @@ fun LeanbackPanelScreenBottomIptvList(
                         favoriteListVisible = true
                         onIptvFavoriteListVisibleChange(true)
                     } else {
-                        LeanbackToastState.I.showToast("无收藏")
+                        Toaster.show("无收藏")
                     }
                 },
                 onUserAction = onUserAction,

@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.debounce
 
 @Stable
 class PanelAutoCloseState internal constructor(
-    @IntRange(from = 0) private val timeout: Long,
+    @param:IntRange(from = 0) private val timeout: Long,
     private val onTimeout: () -> Unit = {},
 ) {
     fun active() {

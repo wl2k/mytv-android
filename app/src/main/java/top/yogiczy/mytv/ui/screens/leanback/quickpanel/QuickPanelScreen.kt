@@ -1,5 +1,6 @@
 package top.yogiczy.mytv.ui.screens.leanback.quickpanel
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -53,7 +54,6 @@ fun LeanbackQuickPanelScreen(
     videoPlayerAspectRatioProvider: () -> Float = { 16f / 9f },
     onChangeVideoPlayerAspectRatio: (Float) -> Unit = {},
     onIptvUrlIdxChange: (Int) -> Unit = {},
-    onClearCache: () -> Unit = {},
     onMoreSettings: () -> Unit = {},
     onClose: () -> Unit = {},
     autoCloseState: PanelAutoCloseState = rememberPanelAutoCloseState(
@@ -120,11 +120,6 @@ fun LeanbackQuickPanelScreen(
                     )
 
                     LeanbackQuickPanelButton(
-                        titleProvider = { "清除缓存" },
-                        onSelect = onClearCache,
-                    )
-
-                    LeanbackQuickPanelButton(
                         titleProvider = { "设置" },
                         onSelect = onMoreSettings,
                     )
@@ -188,6 +183,7 @@ private fun LeanbackQuickPanelActionMultipleChannels(
     }
 }
 
+@SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 private fun LeanbackQuickPanelActionVideoAspectRatio(
     videoPlayerAspectRatioProvider: () -> Float = { 16f / 9f },

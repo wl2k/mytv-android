@@ -1,5 +1,6 @@
 package top.yogiczy.mytv.ui.screens.leanback.main.components
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -7,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -22,8 +22,6 @@ import androidx.compose.ui.unit.Density
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import top.yogiczy.mytv.AppGlobal
 import top.yogiczy.mytv.data.entities.EpgList
 import top.yogiczy.mytv.data.entities.EpgList.Companion.currentProgrammes
 import top.yogiczy.mytv.data.entities.IptvGroupList
@@ -40,13 +38,14 @@ import top.yogiczy.mytv.ui.screens.leanback.panel.rememberLeanbackPanelChannelNo
 import top.yogiczy.mytv.ui.screens.leanback.quickpanel.LeanbackQuickPanelScreen
 import top.yogiczy.mytv.ui.screens.leanback.settings.LeanbackSettingsScreen
 import top.yogiczy.mytv.ui.screens.leanback.settings.LeanbackSettingsViewModel
-import top.yogiczy.mytv.ui.screens.leanback.toast.LeanbackToastState
+import top.yogiczy.mytv.ui.screens.leanback.toast.Toaster
 import top.yogiczy.mytv.ui.screens.leanback.video.LeanbackVideoScreen
 import top.yogiczy.mytv.ui.screens.leanback.video.rememberLeanbackVideoPlayerState
 import top.yogiczy.mytv.ui.utils.SP
 import top.yogiczy.mytv.ui.utils.handleLeanbackDragGestures
 import top.yogiczy.mytv.ui.utils.handleLeanbackKeyEvents
 
+@SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun LeanbackMainContent(
     modifier: Modifier = Modifier,
@@ -56,7 +55,6 @@ fun LeanbackMainContent(
     settingsViewModel: LeanbackSettingsViewModel = viewModel(),
 ) {
     val configuration = LocalConfiguration.current
-    val coroutineScope = rememberCoroutineScope()
 
     val videoPlayerState = rememberLeanbackVideoPlayerState(
         defaultAspectRatioProvider = {
@@ -233,10 +231,10 @@ fun LeanbackMainContent(
 
                         if (settingsViewModel.iptvChannelFavoriteList.contains(it.channelName)) {
                             settingsViewModel.iptvChannelFavoriteList -= it.channelName
-                            LeanbackToastState.I.showToast("取消收藏: ${it.channelName}")
+                            Toaster.show("取消收藏: ${it.channelName}")
                         } else {
                             settingsViewModel.iptvChannelFavoriteList += it.channelName
-                            LeanbackToastState.I.showToast("已收藏: ${it.channelName}")
+                            Toaster.show("已收藏: ${it.channelName}")
                         }
                     },
                     iptvFavoriteListProvider = { settingsViewModel.iptvChannelFavoriteList.toImmutableList() },
@@ -260,10 +258,10 @@ fun LeanbackMainContent(
 
                         if (settingsViewModel.iptvChannelFavoriteList.contains(it.channelName)) {
                             settingsViewModel.iptvChannelFavoriteList -= it.channelName
-                            LeanbackToastState.I.showToast("取消收藏: ${it.channelName}")
+                            Toaster.show("取消收藏: ${it.channelName}")
                         } else {
                             settingsViewModel.iptvChannelFavoriteList += it.channelName
-                            LeanbackToastState.I.showToast("已收藏: ${it.channelName}")
+                            Toaster.show("已收藏: ${it.channelName}")
                         }
                     },
                     iptvFavoriteListProvider = { settingsViewModel.iptvChannelFavoriteList.toImmutableList() },
@@ -293,13 +291,6 @@ fun LeanbackMainContent(
                         iptv = mainContentState.currentIptv,
                         urlIdx = it,
                     )
-                },
-                onClearCache = {
-                    settingsViewModel.iptvPlayableHostList = emptySet()
-                    coroutineScope.launch {
-                        AppGlobal.cacheDir.deleteRecursively()
-                    }
-                    LeanbackToastState.I.showToast("缓存已清除，请重启应用")
                 },
                 onMoreSettings = { mainContentState.isSettingsVisible = true },
                 onClose = { mainContentState.isQuickPanelVisible = false },

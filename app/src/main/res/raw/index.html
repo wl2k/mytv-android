@@ -206,7 +206,7 @@
                         try {
                             vant.showLoadingToast({ message: '加载中...', forbidClick: true, duration: 0 })
                             await requestApi('/api/settings', {
-                                method: 'POST',
+                                method: 'PUT',
                                 body: JSON.stringify({ ...settings.value, logHistory: undefined }),
                                 headers: { 'Content-Type': 'application/json' }
                             })
@@ -239,7 +239,7 @@
                         try {
                             vant.showLoadingToast({ message: '加载中...', forbidClick: true, duration: 0 })
                             const formData = new FormData()
-                            formData.append('filename', file.file)
+                            formData.append('file', file.file)
                             await requestApi('/api/upload/apk', { method: "POST", body: formData })
                             vant.closeToast()
                         } catch (e) {

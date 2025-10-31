@@ -42,7 +42,7 @@ object Constants {
     /**
      * 播放器 user-agent
      */
-    const val VIDEO_PLAYER_USER_AGENT = "okhttp/${okhttp3.OkHttp.VERSION}"
+    const val VIDEO_PLAYER_USER_AGENT = "okhttp/3.12.13"
 
     /**
      * 日志历史最大保留条数

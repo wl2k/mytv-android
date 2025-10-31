@@ -3,7 +3,9 @@ package top.yogiczy.mytv.ui.screens.leanback.settings.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.AlertDialog
@@ -20,14 +22,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.tv.foundation.lazy.list.TvLazyColumn
-import androidx.tv.foundation.lazy.list.TvLazyListState
-import androidx.tv.foundation.lazy.list.items
+import androidx.tv.material3.Icon
+import androidx.tv.material3.ListItem
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -36,10 +35,8 @@ import top.yogiczy.mytv.data.repositories.epg.EpgRepository
 import top.yogiczy.mytv.data.utils.Constants
 import top.yogiczy.mytv.ui.screens.leanback.components.LeanbackQrcodeDialog
 import top.yogiczy.mytv.ui.screens.leanback.settings.LeanbackSettingsViewModel
-import top.yogiczy.mytv.ui.screens.leanback.toast.LeanbackToastState
-import top.yogiczy.mytv.ui.theme.LeanbackTheme
+import top.yogiczy.mytv.ui.screens.leanback.toast.Toaster
 import top.yogiczy.mytv.ui.utils.HttpServer
-import top.yogiczy.mytv.ui.utils.SP
 import top.yogiczy.mytv.ui.utils.handleLeanbackKeyEvents
 import kotlin.math.max
 
@@ -50,10 +47,10 @@ fun LeanbackSettingsCategoryEpg(
 ) {
     val coroutineScope = rememberCoroutineScope()
 
-    TvLazyColumn(
+    LazyColumn(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(10.dp),
         contentPadding = PaddingValues(vertical = 10.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         item {
             LeanbackSettingsCategoryListItem(
@@ -67,7 +64,6 @@ fun LeanbackSettingsCategoryEpg(
                 },
             )
         }
-
         item {
             LeanbackSettingsCategoryListItem(
                 headlineContent = "节目单刷新时间阈值",
@@ -82,9 +78,12 @@ fun LeanbackSettingsCategoryEpg(
                 },
             )
         }
-
         item {
-            var showDialog by remember { mutableStateOf(false) }
+            var showDialog by remember {
+                mutableStateOf(
+                    false
+                )
+            }
 
             LeanbackSettingsCategoryListItem(
                 headlineContent = "自定义节目单",
@@ -116,14 +115,13 @@ fun LeanbackSettingsCategoryEpg(
                 }
             )
         }
-
         item {
             LeanbackSettingsCategoryListItem(
                 headlineContent = "清除缓存",
                 supportingContent = "短按清除节目单缓存文件",
                 onSelected = {
                     coroutineScope.launch { EpgRepository().clearCache() }
-                    LeanbackToastState.I.showToast("清除缓存成功")
+                    Toaster.show("清除缓存成功")
                 },
             )
         }
@@ -153,16 +151,23 @@ private fun LeanbackSettingsEpgSourceHistoryDialog(
             text = {
                 var hasFocused by remember { mutableStateOf(false) }
 
-                TvLazyColumn(
-                    state = TvLazyListState(
-                        max(0, epgXmlUrlHistory.indexOf(currentEpgXmlUrl) - 2),
-                    ),
+                LazyListState(
+                    max(
+                        0,
+                        epgXmlUrlHistory.indexOf(currentEpgXmlUrl) - 2
+                    )
+                )
+                LazyColumn(
                     contentPadding = PaddingValues(vertical = 4.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     items(epgXmlUrlHistory) { url ->
                         val focusRequester = remember { FocusRequester() }
-                        var isFocused by remember { mutableStateOf(false) }
+                        var isFocused by remember {
+                            mutableStateOf(
+                                false
+                            )
+                        }
 
                         LaunchedEffect(Unit) {
                             if (url == currentEpgXmlUrl && !hasFocused) {
@@ -171,7 +176,7 @@ private fun LeanbackSettingsEpgSourceHistoryDialog(
                             }
                         }
 
-                        androidx.tv.material3.ListItem(
+                        ListItem(
                             modifier = Modifier
                                 .focusRequester(focusRequester)
                                 .onFocusChanged { isFocused = it.isFocused || it.hasFocus }
@@ -196,7 +201,7 @@ private fun LeanbackSettingsEpgSourceHistoryDialog(
                             },
                             trailingContent = {
                                 if (currentEpgXmlUrl == url) {
-                                    androidx.tv.material3.Icon(
+                                    Icon(
                                         Icons.Default.CheckCircle,
                                         contentDescription = "checked",
                                     )
@@ -204,13 +209,20 @@ private fun LeanbackSettingsEpgSourceHistoryDialog(
                             },
                         )
                     }
-
                     item {
                         val focusRequester = remember { FocusRequester() }
-                        var isFocused by remember { mutableStateOf(false) }
-                        var showDialog by remember { mutableStateOf(false) }
+                        var isFocused by remember {
+                            mutableStateOf(
+                                false
+                            )
+                        }
+                        var showDialog by remember {
+                            mutableStateOf(
+                                false
+                            )
+                        }
 
-                        androidx.tv.material3.ListItem(
+                        ListItem(
                             modifier = Modifier
                                 .focusRequester(focusRequester)
                                 .onFocusChanged { isFocused = it.isFocused || it.hasFocus }
@@ -235,25 +247,6 @@ private fun LeanbackSettingsEpgSourceHistoryDialog(
                         )
                     }
                 }
-            }
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun LeanbackSettingsCategoryEpgPreview() {
-    SP.init(LocalContext.current)
-    LeanbackTheme {
-        LeanbackSettingsCategoryEpg(
-            modifier = Modifier.padding(20.dp),
-            settingsViewModel = LeanbackSettingsViewModel().apply {
-                epgXmlUrl = "https://iptv-org.github.io/epg.xml"
-                epgXmlUrlHistoryList = setOf(
-                    "https://iptv-org.github.io/epg.xml",
-                    "https://iptv-org.github.io/epg2.xml",
-                    "https://iptv-org.github.io/epg3.xml",
-                )
             }
         )
     }

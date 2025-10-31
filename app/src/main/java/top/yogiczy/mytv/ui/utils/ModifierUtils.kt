@@ -1,5 +1,8 @@
+@file:SuppressLint("SuspiciousModifierThen")
+
 package top.yogiczy.mytv.ui.utils
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.view.KeyEvent
 import androidx.compose.foundation.gestures.detectDragGestures

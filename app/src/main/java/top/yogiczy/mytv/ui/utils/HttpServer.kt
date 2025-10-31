@@ -2,28 +2,26 @@ package top.yogiczy.mytv.ui.utils
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.widget.Toast
-import com.koushikdutta.async.AsyncServer
-import com.koushikdutta.async.http.body.JSONObjectBody
-import com.koushikdutta.async.http.body.MultipartFormDataBody
-import com.koushikdutta.async.http.server.AsyncHttpServer
-import com.koushikdutta.async.http.server.AsyncHttpServerRequest
-import com.koushikdutta.async.http.server.AsyncHttpServerResponse
+import androidx.annotation.RawRes
+import fi.iki.elonen.NanoHTTPD
+import fi.iki.elonen.NanoHTTPD.SOCKET_READ_TIMEOUT
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import top.yogiczy.mytv.AppGlobal
 import top.yogiczy.mytv.R
 import top.yogiczy.mytv.data.repositories.epg.EpgRepository
 import top.yogiczy.mytv.data.repositories.iptv.IptvRepository
 import top.yogiczy.mytv.data.utils.Constants
+import top.yogiczy.mytv.ui.screens.leanback.toast.Toaster
 import top.yogiczy.mytv.utils.ApkInstaller
 import top.yogiczy.mytv.utils.Loggable
 import top.yogiczy.mytv.utils.Logger
 import java.io.File
+import java.io.IOException
 import java.net.Inet4Address
 import java.net.NetworkInterface
 import java.net.SocketException
@@ -31,166 +29,195 @@ import java.net.SocketException
 object HttpServer : Loggable() {
     private const val SERVER_PORT = 10481
 
-    private val uploadedApkFile = File(AppGlobal.cacheDir, "uploaded_apk.apk").apply {
-        deleteOnExit()
-    }
+    @SuppressLint("StaticFieldLeak")
+    private var server: TvHttpServer? = null
 
-    private var showToast: (String) -> Unit = { }
+    val serverUrl: String by lazy { "http://${getLocalIpAddress()}:${SERVER_PORT}" }
 
-    val serverUrl: String by lazy {
-        "http://${getLocalIpAddress()}:${SERVER_PORT}"
-    }
-
-    fun start(context: Context, showToast: (String) -> Unit) {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val server = AsyncHttpServer()
-                server.listen(AsyncServer.getDefault(), SERVER_PORT)
-
-                server.get("/") { _, response ->
-                    handleRawResource(response, context, "text/html", R.raw.index)
-                }
-                server.get("/css") { _, response ->
-                    handleRawResource(response, context, "text/css", R.raw.styles)
-                }
-                server.get("/js") { _, response ->
-                    handleRawResource(response, context, "text/javascript", R.raw.script)
-                }
-                server.get("/api/settings") { _, response ->
-                    handleGetSettings(response)
-                }
-                server.post("/api/settings") { request, response ->
-                    handleSetSettings(request, response)
-                }
-                server.post("/api/upload/apk") { request, response ->
-                    handleUploadApk(request, response, context)
-                }
-
-                HttpServer.showToast = showToast
-                log.i("服务已启动：http://localhost:${SERVER_PORT}")
-            } catch (ex: Exception) {
-                log.e("服务启动失败: ${ex.message}", ex)
-                launch(Dispatchers.Main) {
-                    Toast.makeText(context, "HTTP Server 启动失败", Toast.LENGTH_SHORT).show()
-                }
+    fun start(context: Context) {
+        try {
+            server = TvHttpServer(context).apply { start(SOCKET_READ_TIMEOUT, false) }
+            log.i("服务已启动于: $serverUrl")
+        } catch (ex: IOException) {
+            log.e("服务启动失败: ${ex.message}", ex)
+            CoroutineScope(Dispatchers.Main).launch {
+                Toaster.show("HTTP Server 启动失败")
             }
         }
-    }
-
-    private fun wrapResponse(response: AsyncHttpServerResponse) = response.apply {
-        headers.set(
-            "Access-Control-Allow-Methods", "POST, GET, DELETE, PUT, OPTIONS"
-        )
-        headers.set("Access-Control-Allow-Origin", "*")
-        headers.set(
-            "Access-Control-Allow-Headers", "Origin, Content-Type, X-Auth-Token"
-        )
-    }
-
-    private fun handleRawResource(
-        response: AsyncHttpServerResponse,
-        context: Context,
-        contentType: String,
-        id: Int,
-    ) {
-        wrapResponse(response).apply {
-            setContentType(contentType)
-            send(context.resources.openRawResource(id).readBytes().decodeToString())
-        }
-    }
-
-    private fun handleGetSettings(response: AsyncHttpServerResponse) {
-        wrapResponse(response).apply {
-            setContentType("application/json")
-            send(
-                Json.encodeToString(
-                    AllSettings(
-                        appRepo = Constants.APP_REPO,
-                        iptvSourceUrl = SP.iptvSourceUrl,
-                        epgXmlUrl = SP.epgXmlUrl,
-                        videoPlayerUserAgent = SP.videoPlayerUserAgent,
-                        logHistory = Logger.history,
-                    )
-                )
-            )
-        }
-    }
-
-    private fun handleSetSettings(
-        request: AsyncHttpServerRequest,
-        response: AsyncHttpServerResponse,
-    ) {
-        val body = request.getBody<JSONObjectBody>().get()
-        val iptvSourceUrl = body.get("iptvSourceUrl").toString()
-        val epgXmlUrl = body.get("epgXmlUrl").toString()
-        val videoPlayerUserAgent = body.get("videoPlayerUserAgent").toString()
-
-        if (SP.iptvSourceUrl != iptvSourceUrl) {
-            SP.iptvSourceUrl = iptvSourceUrl
-            IptvRepository().clearCache()
-        }
-
-        if (SP.epgXmlUrl != epgXmlUrl) {
-            SP.epgXmlUrl = epgXmlUrl
-            EpgRepository().clearCache()
-        }
-
-        SP.videoPlayerUserAgent = videoPlayerUserAgent
-
-        wrapResponse(response).send("success")
-    }
-
-    private fun handleUploadApk(
-        request: AsyncHttpServerRequest,
-        response: AsyncHttpServerResponse,
-        context: Context,
-    ) {
-        val body = request.getBody<MultipartFormDataBody>()
-
-        val os = uploadedApkFile.outputStream()
-        val contentLength = request.headers["Content-Length"]?.toLong() ?: 1
-        var hasReceived = 0L
-
-        body.setMultipartCallback { part ->
-            if (part.isFile) {
-                body.setDataCallback { _, bb ->
-                    val byteArray = bb.allByteArray
-                    hasReceived += byteArray.size
-                    showToast("正在接收 APK: ${(hasReceived * 100f / contentLength).toInt()}%")
-                    os.write(byteArray)
-                }
-            }
-        }
-
-        body.setEndCallback {
-            showToast("文件接收完成")
-            body.dataEmitter.close()
-            os.flush()
-            os.close()
-            ApkInstaller.installApk(context, uploadedApkFile.path)
-        }
-
-        wrapResponse(response).send("success")
     }
 
     private fun getLocalIpAddress(): String {
         val defaultIp = "127.0.0.1"
-
         try {
-            val en = NetworkInterface.getNetworkInterfaces()
-            while (en.hasMoreElements()) {
-                val enumIpAddr = en.nextElement().inetAddresses
-                while (enumIpAddr.hasMoreElements()) {
-                    val inetAddress = enumIpAddr.nextElement()
+            val interfaces = NetworkInterface.getNetworkInterfaces()
+            while (interfaces.hasMoreElements()) {
+                val networkInterface = interfaces.nextElement()
+                val addresses = networkInterface.inetAddresses
+                while (addresses.hasMoreElements()) {
+                    val inetAddress = addresses.nextElement()
                     if (!inetAddress.isLoopbackAddress && inetAddress is Inet4Address) {
                         return inetAddress.hostAddress ?: defaultIp
                     }
                 }
             }
-            return defaultIp
         } catch (ex: SocketException) {
-            log.e("Get IP address failed: ${ex.message}", ex)
-            return defaultIp
+            log.e("获取IP地址失败: ${ex.message}", ex)
+        }
+        return defaultIp
+    }
+
+    private class TvHttpServer(private val context: Context) : NanoHTTPD(SERVER_PORT) {
+        private val json = Json { ignoreUnknownKeys = true }
+
+        override fun serve(session: IHTTPSession): Response = runBlocking {
+            val router = Router(session, context, json)
+            try {
+                withContext(Dispatchers.IO) {
+                    when {
+                        // 静态资源
+                        router.matches(Method.GET, "/") -> router.handleIndex()
+                        router.matches(Method.GET, "/css") -> router.handleCss()
+                        router.matches(Method.GET, "/js") -> router.handleJs()
+
+                        // API
+                        router.matches(Method.GET, "/api/settings") -> router.handleGetSettings()
+                        router.matches(Method.PUT, "/api/settings") -> router.handlePutSettings()
+                        router.matches(Method.POST, "/api/upload/apk") -> router.handleUploadApk()
+
+                        // 404 Not Found
+                        else -> newErrorResponse("Not Found", 2, Response.Status.NOT_FOUND)
+                    }
+                }
+            } catch (ex: Exception) {
+                log.e("处理请求失败: ${session.uri}, 错误: ${ex.message}", ex)
+                newErrorResponse()
+            }
+        }
+
+        private inner class Router(
+            private val session: IHTTPSession,
+            private val context: Context,
+            private val json: Json,
+        ) {
+            fun matches(method: Method, uri: String) =
+                session.method == method && session.uri.equals(uri)
+
+            fun handleIndex() = newRawResponse(context, "text/html", R.raw.index)
+            fun handleCss() = newRawResponse(context, "text/css", R.raw.styles)
+            fun handleJs() = newRawResponse(context, "text/javascript", R.raw.script)
+
+            fun handleGetSettings(): Response {
+                val settings = AllSettings(
+                    appRepo = Constants.APP_REPO,
+                    iptvSourceUrl = SP.iptvSourceUrl,
+                    epgXmlUrl = SP.epgXmlUrl,
+                    videoPlayerUserAgent = SP.videoPlayerUserAgent,
+                    logHistory = Logger.history,
+                )
+                return newJsonResponse(settings)
+            }
+
+            suspend fun handlePutSettings(): Response {
+                val body = parseBody(session)
+                val newSettings = json.decodeFromString<AllSettings>(body)
+
+                SP.iptvSourceUrl = newSettings.iptvSourceUrl.also {
+                    if (it != SP.iptvSourceUrl) IptvRepository().clearCache()
+                }
+                SP.epgXmlUrl = newSettings.epgXmlUrl.also {
+                    if (it != SP.epgXmlUrl) EpgRepository().clearCache()
+                }
+                SP.videoPlayerUserAgent = newSettings.videoPlayerUserAgent
+
+                return newSuccessResponse()
+            }
+
+            suspend fun handleUploadApk(): Response {
+                val pathMap = mutableMapOf<String, String>()
+                try {
+                    session.parseBody(pathMap)
+                    val apkPath =
+                        pathMap["file"] ?: return newErrorResponse(
+                            "unable to read APK",
+                            code = 4,
+                            statusCode = Response.Status.BAD_REQUEST
+                        )
+
+                    withContext(Dispatchers.Main) {
+                        Toaster.show("apk: 准备安装...")
+                    }
+
+                    // An APK file must have the extension ".apk"
+                    val sourceFile = File(apkPath)
+                    val targetFile = File("$apkPath.apk")
+                    sourceFile.renameTo(targetFile)
+
+                    ApkInstaller.installApk(context, targetFile)
+                    return newSuccessResponse()
+                } catch (e: Exception) {
+                    log.e("处理 APK 失败", e)
+                    return newErrorResponse("unable to process APK: ${e.message}", code = 5)
+                }
+            }
+
+            private suspend fun parseBody(session: IHTTPSession): String {
+                return withContext(Dispatchers.IO) {
+                    val bodySize = session.headers["content-length"]?.toIntOrNull() ?: 0
+                    if (bodySize == 0) return@withContext ""
+
+                    val buffer = ByteArray(bodySize)
+                    session.inputStream.read(buffer, 0, bodySize)
+                    String(buffer)
+                }
+            }
+        }
+
+        // --- 响应辅助函数 ---
+        private fun newResponse(
+            status: Response.Status,
+            data: String,
+            mimeType: String = "application/json",
+        ) = newFixedLengthResponse(status, mimeType, data)
+
+        private inline fun <reified T> newJsonResponse(
+            data: T,
+            code: Response.Status = Response.Status.OK
+        ): Response {
+            val jsonString = json.encodeToString(data)
+            return newResponse(code, jsonString)
+        }
+
+        @Serializable
+        data class Result(val code: Int, val message: String)
+
+        private fun newSuccessResponse() =
+            newJsonResponse(Result(0, "success"))
+
+        private fun newErrorResponse(
+            message: String = "Internal Server Error",
+            code: Int = 1,
+            statusCode: Response.Status = Response.Status.INTERNAL_ERROR
+        ) =
+            newJsonResponse(Result(code, message), statusCode)
+
+        private fun newRawResponse(
+            context: Context,
+            mimeType: String,
+            @RawRes resourceId: Int,
+        ): Response = try {
+            val inputStream = context.resources.openRawResource(resourceId)
+            newFixedLengthResponse(
+                Response.Status.OK,
+                mimeType,
+                inputStream,
+                inputStream.available().toLong()
+            )
+        } catch (e: Exception) {
+            log.e("读取资源失败: $resourceId", e)
+            newErrorResponse(
+                "unable to read raw: $resourceId",
+                code = 3
+            )
         }
     }
 }
@@ -202,6 +229,5 @@ private data class AllSettings(
     val iptvSourceUrl: String,
     val epgXmlUrl: String,
     val videoPlayerUserAgent: String,
-
     val logHistory: List<Logger.HistoryItem>,
 )

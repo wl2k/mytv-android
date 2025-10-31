@@ -186,14 +186,6 @@ class LeanbackSettingsViewModel : ViewModel() {
             SP.uiPipMode = value
         }
 
-    private var _updateForceRemind by mutableStateOf(SP.updateForceRemind)
-    var updateForceRemind: Boolean
-        get() = _updateForceRemind
-        set(value) {
-            _updateForceRemind = value
-            SP.updateForceRemind = value
-        }
-
     private var _videoPlayerUserAgent by mutableStateOf(SP.videoPlayerUserAgent)
     var videoPlayerUserAgent: String
         get() = _videoPlayerUserAgent

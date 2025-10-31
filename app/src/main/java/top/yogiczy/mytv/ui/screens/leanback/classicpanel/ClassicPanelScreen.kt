@@ -186,6 +186,7 @@ private fun LeanbackClassicPanelScreenContent(
                     onLeft = { epgListVisible = false }
                 )
                 .focusProperties {
+                    @Suppress("DEPRECATION")
                     exit = {
                         if (epgListVisible && it == FocusDirection.Left) {
                             epgListVisible = false

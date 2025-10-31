@@ -1,6 +1,9 @@
 package top.yogiczy.mytv.ui.screens.leanback.panel.components
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.AlertDialog
@@ -24,9 +27,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.tv.foundation.lazy.list.TvLazyColumn
-import androidx.tv.foundation.lazy.list.TvLazyListState
-import androidx.tv.foundation.lazy.list.items
+import androidx.tv.material3.ListItem
 import androidx.tv.material3.ListItemDefaults
 import kotlinx.coroutines.flow.distinctUntilChanged
 import top.yogiczy.mytv.data.entities.Epg
@@ -62,8 +63,10 @@ fun LeanbackPanelIptvEpgDialog(
                 val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
                 var hasFocused by remember(iptv) { mutableStateOf(false) }
 
-                val listState = TvLazyListState(
-                    max(0, epg.programmes.indexOfFirst { it.isLive() } - 2))
+                val listState = LazyListState(
+                    max(
+                        0,
+                        epg.programmes.indexOfFirst { it.isLive() } - 2))
 
                 LaunchedEffect(listState) {
                     snapshotFlow { listState.isScrollInProgress }
@@ -71,13 +74,17 @@ fun LeanbackPanelIptvEpgDialog(
                         .collect { _ -> onUserAction() }
                 }
 
-                TvLazyColumn(
+                LazyColumn(
                     state = listState,
                     contentPadding = PaddingValues(vertical = 4.dp),
                 ) {
                     if (epg.programmes.isNotEmpty()) {
                         items(epg.programmes, key = { it.hashCode() }) { programme ->
-                            var isFocused by remember { mutableStateOf(false) }
+                            var isFocused by remember {
+                                mutableStateOf(
+                                    false
+                                )
+                            }
                             val focusRequester = remember { FocusRequester() }
 
                             LaunchedEffect(Unit) {
@@ -91,7 +98,7 @@ fun LeanbackPanelIptvEpgDialog(
                                 LocalContentColor provides if (isFocused) MaterialTheme.colorScheme.background
                                 else MaterialTheme.colorScheme.onBackground
                             ) {
-                                androidx.tv.material3.ListItem(
+                                ListItem(
                                     modifier = Modifier
                                         .focusRequester(focusRequester)
                                         .onFocusChanged { isFocused = it.isFocused || it.hasFocus }
@@ -133,7 +140,11 @@ fun LeanbackPanelIptvEpgDialog(
                         }
                     } else {
                         item {
-                            var isFocused by remember { mutableStateOf(false) }
+                            var isFocused by remember {
+                                mutableStateOf(
+                                    false
+                                )
+                            }
                             val focusRequester = remember { FocusRequester() }
                             LaunchedEffect(Unit) {
                                 focusRequester.requestFocus()
@@ -143,7 +154,7 @@ fun LeanbackPanelIptvEpgDialog(
                                 LocalContentColor provides if (isFocused) MaterialTheme.colorScheme.background
                                 else MaterialTheme.colorScheme.onBackground
                             ) {
-                                androidx.tv.material3.ListItem(
+                                ListItem(
                                     modifier = Modifier
                                         .focusRequester(focusRequester)
                                         .onFocusChanged { isFocused = it.isFocused || it.hasFocus },

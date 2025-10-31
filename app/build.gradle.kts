@@ -25,7 +25,6 @@ android {
         versionCode = 145
         versionName = "1.4.5"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -47,9 +46,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-    kotlinOptions {
-        jvmTarget = "1.8"
+    kotlin {
+        jvmToolchain(8)
     }
+
     buildFeatures {
         compose = true
     }
@@ -77,7 +77,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
@@ -91,7 +90,6 @@ dependencies {
     implementation(libs.androidx.material.icons.extended)
 
     // TV Compose
-    implementation(libs.androidx.tv.foundation)
     implementation(libs.androidx.tv.material)
 
     // 播放器
@@ -104,18 +102,10 @@ dependencies {
 
     // 网络请求
     implementation(libs.okhttp)
-    implementation(libs.androidasync)
+    implementation(libs.nanohttpd)
 
     // 二维码
     implementation(libs.qrose)
 
-    // implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
-
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
 }

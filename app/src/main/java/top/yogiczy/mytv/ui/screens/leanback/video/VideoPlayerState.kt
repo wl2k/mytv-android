@@ -11,9 +11,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import top.yogiczy.mytv.ui.screens.leanback.video.player.LeanbackMedia3VideoPlayer
 import top.yogiczy.mytv.ui.screens.leanback.video.player.LeanbackVideoPlayer
 
