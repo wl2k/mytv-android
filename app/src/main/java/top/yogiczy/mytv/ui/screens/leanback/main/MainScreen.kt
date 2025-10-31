@@ -199,6 +199,9 @@ private fun LeanbackMainSettingsHandle(
                 .focusRequester(focusRequester)
                 .focusable()
                 .handleLeanbackKeyEvents(
+                    onLongSelect = {
+                        showSettings = true
+                    },
                     onSettings = {
                         showSettings = true
                     },
