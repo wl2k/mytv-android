@@ -116,6 +116,7 @@ fun LeanbackPanelScreenTopRight(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             LeanbackPanelChannelNo(
+                modifier = Modifier.align(Alignment.End),
                 fontSize = 96,
                 channelNoProvider = channelNoProvider
             )
@@ -249,7 +250,7 @@ fun LeanbackPanelScreenBottomIptvList(
 private fun LeanbackPanelScreenTopRightPreview() {
     LeanbackTheme {
         LeanbackPanelScreenTopRight(
-            channelNoProvider = { "10" },
+            channelNoProvider = { "1" },
         )
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.view.SurfaceView
 import androidx.annotation.OptIn
+import androidx.core.net.toUri
 import androidx.media3.common.C
 import androidx.media3.common.Format
 import androidx.media3.common.MediaItem
@@ -217,7 +218,7 @@ class LeanbackMedia3VideoPlayer(
     @UnstableApi
     override fun prepare(url: String) {
         contentTypeAttempts.clear()
-        prepare(Uri.parse(url))
+        prepare(url.toUri())
     }
 
     override fun play() {
