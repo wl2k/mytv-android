@@ -15,11 +15,11 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace = "top.yogiczy.mytv"
+    namespace = "top.wl2k.mytv"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "top.yogiczy.mytv"
+        applicationId = "top.wl2k.mytv"
         minSdk = 21
         targetSdk = 36
         versionCode = 145

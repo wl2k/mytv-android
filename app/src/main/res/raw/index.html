@@ -207,7 +207,7 @@
                             vant.showLoadingToast({ message: '加载中...', forbidClick: true, duration: 0 })
                             await requestApi('/api/settings', {
                                 method: 'PUT',
-                                body: JSON.stringify({ ...settings.value, logHistory: undefined }),
+                                body: JSON.stringify({ ...settings.value, logHistory: [] }),
                                 headers: { 'Content-Type': 'application/json' }
                             })
                             await refreshSettings()
