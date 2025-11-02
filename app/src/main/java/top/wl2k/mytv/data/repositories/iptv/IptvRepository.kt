@@ -33,7 +33,7 @@ class IptvRepository : FileCacheRepository("iptv.txt") {
                     throw Exception("获取远程直播源失败: $code")
                 }
 
-                return@with body!!.string()
+                return@with body.string()
             }
         } catch (ex: Exception) {
             log.e("获取远程直播源失败", ex)
@@ -44,7 +44,7 @@ class IptvRepository : FileCacheRepository("iptv.txt") {
     /**
      * 简化规则
      */
-    private fun simplifyTest(group: IptvGroup, iptv: Iptv): Boolean {
+    private fun simplifyTest(iptv: Iptv): Boolean {
         return iptv.name.lowercase().startsWith("cctv") || iptv.name.endsWith("卫视")
     }
 
@@ -69,7 +69,7 @@ class IptvRepository : FileCacheRepository("iptv.txt") {
                 return IptvGroupList(groupList.map { group ->
                     IptvGroup(
                         name = group.name, iptvList = IptvList(group.iptvList.filter { iptv ->
-                            simplifyTest(group, iptv)
+                            simplifyTest(iptv)
                         })
                     )
                 }.filter { it.iptvList.isNotEmpty() })

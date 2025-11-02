@@ -5,6 +5,7 @@ import androidx.compose.runtime.Immutable
 /**
  * 直播源分组列表
  */
+@Suppress("JavaDefaultMethodsNotOverriddenByDelegation")
 @Immutable
 data class IptvGroupList(
     val value: List<IptvGroup> = emptyList(),

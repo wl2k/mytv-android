@@ -12,7 +12,7 @@ class XmlGzEpgFetcher : EpgFetcher {
     }
 
     override fun fetch(response: Response): String {
-        val gzData = response.body!!.bytes()
+        val gzData = response.body.bytes()
         val stringBuilder = StringBuilder()
         GZIPInputStream(ByteArrayInputStream(gzData)).use { gzipInputStream ->
             BufferedReader(InputStreamReader(gzipInputStream)).use { reader ->

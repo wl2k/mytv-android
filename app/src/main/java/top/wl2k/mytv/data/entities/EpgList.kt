@@ -3,6 +3,7 @@ package top.wl2k.mytv.data.entities
 import androidx.compose.runtime.Immutable
 import top.wl2k.mytv.data.entities.Epg.Companion.currentProgrammes
 
+@Suppress("JavaDefaultMethodsNotOverriddenByDelegation")
 @Immutable
 data class EpgList(
     val value: List<Epg> = emptyList(),

@@ -8,6 +8,6 @@ class XmlEpgFetcher : EpgFetcher {
     }
 
     override fun fetch(response: Response): String {
-        return response.body!!.string()
+        return response.body.string()
     }
 }

@@ -31,6 +31,7 @@ fun LeanbackPanelChannelNoSelectScreen(
 
     Box(modifier = modifier.fillMaxSize()) {
         LeanbackPanelChannelNo(
+            fontSize = 96,
             channelNoProvider = channelNoProvider,
             modifier = Modifier
                 .padding(top = childPadding.top, end = childPadding.end)
