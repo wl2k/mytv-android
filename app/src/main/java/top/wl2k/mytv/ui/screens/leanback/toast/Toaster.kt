@@ -21,7 +21,7 @@ class Toaster private constructor(
                 ?: throw IllegalStateException(
                     """
                     Toaster has not been initialized.
-                    Please call `Toaster.init(this)` in `Application.onCreate()`.
+                    Please call `Toaster.init(this)` in `onCreate()`.
                     """.trimIndent()
                 )
         }
@@ -36,12 +36,9 @@ class Toaster private constructor(
             instance.show(message, duration)
         }
 
-        @Volatile
         private var _context: Context? = null
-
         fun init(context: Context) {
-            if (_context == null)
-                _context = context.applicationContext
+            _context = context.applicationContext
         }
     }
 }

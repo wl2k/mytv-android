@@ -209,4 +209,12 @@ class LeanbackSettingsViewModel : ViewModel() {
             _videoPlayerAspectRatio = value
             SP.videoPlayerAspectRatio = value
         }
+
+    private var _bootAppLaunchEnable by mutableStateOf(SP.appBootLaunch)
+    var bootAppLaunchReceiverEnable: Boolean
+        get() = _bootAppLaunchEnable
+        set(value) {
+            _bootAppLaunchEnable = value
+            SP.appBootLaunch = value
+        }
 }

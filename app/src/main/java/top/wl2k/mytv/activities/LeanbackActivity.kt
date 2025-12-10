@@ -21,7 +21,6 @@ import top.wl2k.mytv.ui.screens.leanback.toast.Toaster
 import top.wl2k.mytv.ui.theme.LeanbackTheme
 import top.wl2k.mytv.ui.utils.HttpServer
 import top.wl2k.mytv.ui.utils.SP
-import kotlin.system.exitProcess
 
 class LeanbackActivity : ComponentActivity() {
     override fun onUserLeaveHint() {
@@ -63,7 +62,6 @@ class LeanbackActivity : ComponentActivity() {
                     LeanbackApp(
                         onBackPressed = {
                             finish()
-                            exitProcess(0)
                         },
                     )
                 }

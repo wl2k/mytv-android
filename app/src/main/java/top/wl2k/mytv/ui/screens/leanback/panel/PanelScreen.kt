@@ -250,7 +250,7 @@ fun LeanbackPanelScreenBottomIptvList(
 private fun LeanbackPanelScreenTopRightPreview() {
     LeanbackTheme {
         LeanbackPanelScreenTopRight(
-            channelNoProvider = { "1" },
+            channelNoProvider = { "10" },
         )
     }
 }

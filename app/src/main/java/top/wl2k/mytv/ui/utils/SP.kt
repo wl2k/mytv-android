@@ -21,11 +21,7 @@ object SP {
     }
 
     enum class KEY {
-        /** ==================== 应用 ==================== */
-        /** 设备显示类型 */
-        APP_DEVICE_DISPLAY_TYPE,
-
-        /** ==================== 调式 ==================== */
+        /** ==================== 调试 ==================== */
         /** 显示fps */
         DEBUG_SHOW_FPS,
 
@@ -107,16 +103,12 @@ object SP {
 
         /** 播放器 画面比例 */
         VIDEO_PLAYER_ASPECT_RATIO,
+
+        /** 开机自启 */
+        APP_BOOT_LAUNCH,
     }
 
-    /** ==================== 应用 ==================== */
-
-    /** 设备显示类型 */
-    var appDeviceDisplayType: AppDeviceDisplayType
-        get() = AppDeviceDisplayType.fromValue(sp.getInt(KEY.APP_DEVICE_DISPLAY_TYPE.name, 0))
-        set(value) = sp.edit { putInt(KEY.APP_DEVICE_DISPLAY_TYPE.name, value.value) }
-
-    /** ==================== 调式 ==================== */
+    /** ==================== 调试 ==================== */
     /** 显示fps */
     var debugShowFps: Boolean
         get() = sp.getBoolean(KEY.DEBUG_SHOW_FPS.name, false)
@@ -258,6 +250,11 @@ object SP {
         )
         set(value) = sp.edit { putInt(KEY.VIDEO_PLAYER_ASPECT_RATIO.name, value.value) }
 
+    /** 开机自启 */
+    var appBootLaunch: Boolean
+        get() = sp.getBoolean(KEY.APP_BOOT_LAUNCH.name, false)
+        set(value) = sp.edit { putBoolean(KEY.APP_BOOT_LAUNCH.name, value) }
+
     enum class UiTimeShowMode(val value: Int) {
         /** 隐藏 */
         HIDDEN(0),
@@ -274,23 +271,6 @@ object SP {
         companion object {
             fun fromValue(value: Int): UiTimeShowMode {
                 return entries.firstOrNull { it.value == value } ?: ALWAYS
-            }
-        }
-    }
-
-    enum class AppDeviceDisplayType(val value: Int) {
-        /** tv端 */
-        LEANBACK(0),
-
-        /** 手机端 */
-        MOBILE(1),
-
-        /** 平板端 */
-        PAD(2);
-
-        companion object {
-            fun fromValue(value: Int): AppDeviceDisplayType {
-                return entries.firstOrNull { it.value == value } ?: LEANBACK
             }
         }
     }

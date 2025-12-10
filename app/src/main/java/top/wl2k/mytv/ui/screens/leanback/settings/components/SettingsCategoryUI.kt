@@ -64,8 +64,8 @@ fun LeanbackSettingsCategoryUI(
                 supportingContent = when (settingsViewModel.uiTimeShowMode) {
                     SP.UiTimeShowMode.HIDDEN -> "不显示时间"
                     SP.UiTimeShowMode.ALWAYS -> "总是显示时间"
-                    SP.UiTimeShowMode.EVERY_HOUR -> "整点前后${timeShowRangeSeconds}s显示时间"
-                    SP.UiTimeShowMode.HALF_HOUR -> "半点前后${timeShowRangeSeconds}s显示时间"
+                    SP.UiTimeShowMode.EVERY_HOUR -> "整点前后 ${timeShowRangeSeconds}s 显示时间"
+                    SP.UiTimeShowMode.HALF_HOUR -> "半点前后 ${timeShowRangeSeconds}s 显示时间"
                 },
                 trailingContent = when (settingsViewModel.uiTimeShowMode) {
                     SP.UiTimeShowMode.HIDDEN -> "隐藏"
@@ -95,6 +95,22 @@ fun LeanbackSettingsCategoryUI(
                 onSelected = {
                     settingsViewModel.uiPipMode =
                         !settingsViewModel.uiPipMode
+                },
+            )
+        }
+        item {
+            LeanbackSettingsCategoryListItem(
+                headlineContent = "开机自启",
+                supportingContent = "应用是否在系统启动后自动打开",
+                trailingContent = {
+                    Switch(
+                        checked = settingsViewModel.bootAppLaunchReceiverEnable,
+                        onCheckedChange = null
+                    )
+                },
+                onSelected = {
+                    settingsViewModel.bootAppLaunchReceiverEnable =
+                        !settingsViewModel.bootAppLaunchReceiverEnable
                 },
             )
         }
