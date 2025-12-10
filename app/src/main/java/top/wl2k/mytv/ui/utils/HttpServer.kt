@@ -77,7 +77,8 @@ object HttpServer : Loggable() {
                         // 静态资源
                         router.matches(Method.GET, "/") -> router.handleHtml()
                         router.matches(Method.GET, "/css") -> router.handleCss()
-                        router.matches(Method.GET, "/js") -> router.handleJs()
+                        router.matches(Method.GET, "/js/vue") -> router.handleVue()
+                        router.matches(Method.GET, "/js/vant") -> router.handleVant()
 
                         // API
                         router.matches(Method.GET, "/api/settings") -> router.handleGetSettings()
@@ -104,7 +105,8 @@ object HttpServer : Loggable() {
 
             fun handleHtml() = newRawResponse(context, "text/html", R.raw.index)
             fun handleCss() = newRawResponse(context, "text/css", R.raw.styles)
-            fun handleJs() = newRawResponse(context, "text/javascript", R.raw.script)
+            fun handleVue() = newRawResponse(context, "text/javascript", R.raw.vue)
+            fun handleVant() = newRawResponse(context, "text/javascript", R.raw.vant)
 
             fun handleGetSettings(): Response {
                 val settings = AllSettings(

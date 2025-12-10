@@ -32,7 +32,6 @@ import top.wl2k.mytv.ui.screens.leanback.components.LeanbackVisible
 import top.wl2k.mytv.ui.screens.leanback.monitor.LeanbackMonitorScreen
 import top.wl2k.mytv.ui.screens.leanback.panel.LeanbackPanelChannelNoSelectScreen
 import top.wl2k.mytv.ui.screens.leanback.panel.LeanbackPanelDateTimeScreen
-import top.wl2k.mytv.ui.screens.leanback.panel.LeanbackPanelScreen
 import top.wl2k.mytv.ui.screens.leanback.panel.LeanbackPanelTempScreen
 import top.wl2k.mytv.ui.screens.leanback.panel.rememberLeanbackPanelChannelNoSelectState
 import top.wl2k.mytv.ui.screens.leanback.quickpanel.LeanbackQuickPanelScreen
@@ -217,36 +216,7 @@ fun LeanbackMainContent(
                 )
             }
 
-            LeanbackVisible({ !settingsViewModel.uiUseClassicPanelScreen && mainContentState.isPanelVisible }) {
-                LeanbackPanelScreen(
-                    iptvGroupListProvider = { iptvGroupList },
-                    epgListProvider = { epgList },
-                    currentIptvProvider = { mainContentState.currentIptv },
-                    currentIptvUrlIdxProvider = { mainContentState.currentIptvUrlIdx },
-                    videoPlayerMetadataProvider = { videoPlayerState.metadata },
-                    showProgrammeProgressProvider = { settingsViewModel.uiShowEpgProgrammeProgress },
-                    onIptvSelected = { mainContentState.changeCurrentIptv(it) },
-                    onIptvFavoriteToggle = {
-                        if (!settingsViewModel.iptvChannelFavoriteEnable) return@LeanbackPanelScreen
-
-                        if (settingsViewModel.iptvChannelFavoriteList.contains(it.channelName)) {
-                            settingsViewModel.iptvChannelFavoriteList -= it.channelName
-                            Toaster.show("取消收藏: ${it.channelName}")
-                        } else {
-                            settingsViewModel.iptvChannelFavoriteList += it.channelName
-                            Toaster.show("已收藏: ${it.channelName}")
-                        }
-                    },
-                    iptvFavoriteListProvider = { settingsViewModel.iptvChannelFavoriteList.toImmutableList() },
-                    iptvFavoriteListVisibleProvider = { settingsViewModel.iptvChannelFavoriteListVisible },
-                    onIptvFavoriteListVisibleChange = {
-                        settingsViewModel.iptvChannelFavoriteListVisible = it
-                    },
-                    onClose = { mainContentState.isPanelVisible = false },
-                )
-            }
-
-            LeanbackVisible({ settingsViewModel.uiUseClassicPanelScreen && mainContentState.isPanelVisible }) {
+            LeanbackVisible({ mainContentState.isPanelVisible }) {
                 LeanbackClassicPanelScreen(
                     iptvGroupListProvider = { iptvGroupList },
                     epgListProvider = { epgList },

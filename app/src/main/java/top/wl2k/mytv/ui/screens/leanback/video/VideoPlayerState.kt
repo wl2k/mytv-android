@@ -79,10 +79,8 @@ class LeanbackVideoPlayerState(
             }
         }
         instance.onError { ex ->
-            error = if (ex != null) "${ex.errorCodeName}(${ex.errorCode})"
-            else null
-
-            if (error != null) onErrorListeners.forEach { it.invoke() }
+            error = ex?.let { "${ex.errorCodeName} (${ex.errorCode})" }
+            error?.let { onErrorListeners.forEach { it.invoke() } }
 
         }
         instance.onReady { onReadyListeners.forEach { it.invoke() } }
@@ -123,10 +121,10 @@ fun rememberLeanbackVideoPlayerState(
 
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_RESUME) {
-                state.play()
-            } else if (event == Lifecycle.Event.ON_STOP) {
-                state.pause()
+            when (event) {
+                Lifecycle.Event.ON_RESUME -> state.play()
+                Lifecycle.Event.ON_PAUSE -> state.pause()
+                else -> {}
             }
         }
 

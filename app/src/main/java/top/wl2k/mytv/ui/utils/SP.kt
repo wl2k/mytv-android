@@ -79,9 +79,6 @@ object SP {
         /** 显示节目进度 */
         UI_SHOW_EPG_PROGRAMME_PROGRESS,
 
-        /** 使用经典选台界面 */
-        UI_USE_CLASSIC_PANEL_SCREEN,
-
         /** 界面密度缩放比例 */
         UI_DENSITY_SCALE_RATIO,
 
@@ -90,9 +87,6 @@ object SP {
 
         /** 时间显示模式 */
         UI_TIME_SHOW_MODE,
-
-        /** 画中画模式 */
-        UI_PIP_MODE,
 
         /** ==================== 播放器 ==================== */
         /** 播放器 自定义ua */
@@ -205,11 +199,6 @@ object SP {
         get() = sp.getBoolean(KEY.UI_SHOW_EPG_PROGRAMME_PROGRESS.name, true)
         set(value) = sp.edit { putBoolean(KEY.UI_SHOW_EPG_PROGRAMME_PROGRESS.name, value) }
 
-    /** 使用经典选台界面 */
-    var uiUseClassicPanelScreen: Boolean
-        get() = sp.getBoolean(KEY.UI_USE_CLASSIC_PANEL_SCREEN.name, false)
-        set(value) = sp.edit { putBoolean(KEY.UI_USE_CLASSIC_PANEL_SCREEN.name, value) }
-
     /** 界面密度缩放比例 */
     var uiDensityScaleRatio: Float
         get() = sp.getFloat(KEY.UI_DENSITY_SCALE_RATIO.name, 1f)
@@ -224,11 +213,6 @@ object SP {
     var uiTimeShowMode: UiTimeShowMode
         get() = UiTimeShowMode.fromValue(sp.getInt(KEY.UI_TIME_SHOW_MODE.name, 0))
         set(value) = sp.edit { putInt(KEY.UI_TIME_SHOW_MODE.name, value.value) }
-
-    /** 画中画模式 */
-    var uiPipMode: Boolean
-        get() = sp.getBoolean(KEY.UI_PIP_MODE.name, false)
-        set(value) = sp.edit { putBoolean(KEY.UI_PIP_MODE.name, value) }
 
     /** ==================== 播放器 ==================== */
     /** 播放器 自定义ua */

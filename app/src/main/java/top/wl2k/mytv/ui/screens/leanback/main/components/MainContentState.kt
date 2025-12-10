@@ -1,5 +1,6 @@
 package top.wl2k.mytv.ui.screens.leanback.main.components
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
@@ -11,7 +12,6 @@ import androidx.compose.runtime.setValue
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.serialization.InternalSerializationApi
 import top.wl2k.mytv.data.entities.Iptv
 import top.wl2k.mytv.data.entities.IptvGroupList
 import top.wl2k.mytv.data.entities.IptvGroupList.Companion.iptvIdx
@@ -63,6 +63,8 @@ class LeanbackMainContentState(
             _isQuickPanelVisible = value
         }
 
+    private var needRetryAllUrls = false
+
     init {
         changeCurrentIptv(iptvGroupList.iptvList.getOrElse(SP.iptvLastIptvIdx) {
             iptvGroupList.firstOrNull()?.iptvList?.firstOrNull() ?: Iptv()
@@ -80,10 +82,18 @@ class LeanbackMainContentState(
 
             // 记忆可播放的域名
             SP.iptvPlayableHostList += getHostFrom(_currentIptv.urlList[_currentIptvUrlIdx])
+            needRetryAllUrls = false
         }
 
         videoPlayerState.onError {
-            if (_currentIptvUrlIdx < _currentIptv.urlList.size - 1) {
+            if (_currentIptvUrlIdx >= _currentIptv.urlList.size - 1) {
+                // 已经是最后一个 URL，证明频道的所有 URL 都不可用，再重试一轮；如果仍然不可用，再切换到下一个频道
+                if (!needRetryAllUrls) {
+                    needRetryAllUrls = true
+                    Log.i("MainContentState", "已尝试所有 URL，再次尝试当前频道")
+                    changeCurrentIptv(_currentIptv, 0)
+                }
+            } else {
                 changeCurrentIptv(_currentIptv, _currentIptvUrlIdx + 1)
             }
 
@@ -110,15 +120,16 @@ class LeanbackMainContentState(
         }
     }
 
-    @OptIn(InternalSerializationApi::class)
     fun changeCurrentIptv(iptv: Iptv, urlIdx: Int? = null) {
         _isPanelVisible = false
 
         if (iptv == _currentIptv && urlIdx == null) return
-
-        if (iptv == _currentIptv && urlIdx != _currentIptvUrlIdx) {
+        if (iptv == _currentIptv && urlIdx != _currentIptvUrlIdx)
             SP.iptvPlayableHostList -= getHostFrom(_currentIptv.urlList[_currentIptvUrlIdx])
-        }
+
+
+        if (iptv != _currentIptv)
+            needRetryAllUrls = false
 
         _isTempPanelVisible = true
 

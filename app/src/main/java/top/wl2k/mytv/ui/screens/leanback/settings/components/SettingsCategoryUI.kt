@@ -41,22 +41,6 @@ fun LeanbackSettingsCategoryUI(
             )
         }
         item {
-            LeanbackSettingsCategoryListItem(
-                headlineContent = "经典选台界面",
-                supportingContent = "将选台界面替换为经典三段式结构",
-                trailingContent = {
-                    Switch(
-                        checked = settingsViewModel.uiUseClassicPanelScreen,
-                        onCheckedChange = null
-                    )
-                },
-                onSelected = {
-                    settingsViewModel.uiUseClassicPanelScreen =
-                        !settingsViewModel.uiUseClassicPanelScreen
-                },
-            )
-        }
-        item {
             val timeShowRangeSeconds = Constants.UI_TIME_SHOW_RANGE / 1000
 
             LeanbackSettingsCategoryListItem(
@@ -85,23 +69,8 @@ fun LeanbackSettingsCategoryUI(
         }
         item {
             LeanbackSettingsCategoryListItem(
-                headlineContent = "画中画模式",
-                trailingContent = {
-                    Switch(
-                        checked = settingsViewModel.uiPipMode,
-                        onCheckedChange = null
-                    )
-                },
-                onSelected = {
-                    settingsViewModel.uiPipMode =
-                        !settingsViewModel.uiPipMode
-                },
-            )
-        }
-        item {
-            LeanbackSettingsCategoryListItem(
                 headlineContent = "开机自启",
-                supportingContent = "应用是否在系统启动后自动打开",
+                supportingContent = "应用是否在开机后自动打开",
                 trailingContent = {
                     Switch(
                         checked = settingsViewModel.bootAppLaunchReceiverEnable,
@@ -119,7 +88,7 @@ fun LeanbackSettingsCategoryUI(
                 headlineContent = "超时自动关闭界面",
                 supportingContent = "影响选台界面，快捷操作界面",
                 trailingContent = Constants.UI_SCREEN_AUTO_CLOSE_DELAY.humanizeMs(),
-                locK = true,
+                lock = true,
             )
         }
         item {

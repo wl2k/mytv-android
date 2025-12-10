@@ -1,23 +1,18 @@
 package top.wl2k.mytv.ui.screens.leanback.panel
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.Devices.TV_720p
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,10 +22,8 @@ import top.wl2k.mytv.data.entities.EpgList
 import top.wl2k.mytv.data.entities.EpgList.Companion.currentProgrammes
 import top.wl2k.mytv.data.entities.Iptv
 import top.wl2k.mytv.data.entities.IptvGroupList
-import top.wl2k.mytv.data.entities.IptvGroupList.Companion.iptvIdx
 import top.wl2k.mytv.data.entities.IptvGroupList.Companion.iptvList
 import top.wl2k.mytv.data.entities.IptvList
-import top.wl2k.mytv.data.utils.Constants
 import top.wl2k.mytv.ui.rememberLeanbackChildPadding
 import top.wl2k.mytv.ui.screens.leanback.panel.components.LeanbackPanelChannelNo
 import top.wl2k.mytv.ui.screens.leanback.panel.components.LeanbackPanelDateTime
@@ -41,63 +34,6 @@ import top.wl2k.mytv.ui.screens.leanback.panel.components.LeanbackPanelPlayerInf
 import top.wl2k.mytv.ui.screens.leanback.toast.Toaster
 import top.wl2k.mytv.ui.screens.leanback.video.player.LeanbackVideoPlayer
 import top.wl2k.mytv.ui.theme.LeanbackTheme
-
-@Composable
-fun LeanbackPanelScreen(
-    modifier: Modifier = Modifier,
-    iptvGroupListProvider: () -> IptvGroupList = { IptvGroupList() },
-    epgListProvider: () -> EpgList = { EpgList() },
-    currentIptvProvider: () -> Iptv = { Iptv() },
-    currentIptvUrlIdxProvider: () -> Int = { 0 },
-    videoPlayerMetadataProvider: () -> LeanbackVideoPlayer.Metadata = { LeanbackVideoPlayer.Metadata() },
-    showProgrammeProgressProvider: () -> Boolean = { false },
-    iptvFavoriteEnableProvider: () -> Boolean = { true },
-    iptvFavoriteListProvider: () -> ImmutableList<String> = { persistentListOf() },
-    iptvFavoriteListVisibleProvider: () -> Boolean = { false },
-    onIptvFavoriteListVisibleChange: (Boolean) -> Unit = {},
-    onIptvSelected: (Iptv) -> Unit = {},
-    onIptvFavoriteToggle: (Iptv) -> Unit = {},
-    onClose: () -> Unit = {},
-    autoCloseState: PanelAutoCloseState = rememberPanelAutoCloseState(
-        timeout = Constants.UI_SCREEN_AUTO_CLOSE_DELAY,
-        onTimeout = onClose,
-    ),
-) {
-    LaunchedEffect(Unit) {
-        autoCloseState.active()
-    }
-
-    val channelNoProvider = {
-        val idx = iptvGroupListProvider().iptvIdx(currentIptvProvider())
-        (idx + 1).toString()
-    }
-
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background.copy(alpha = 0.5f))
-            .pointerInput(Unit) { detectTapGestures(onTap = { onClose() }) },
-    ) {
-        LeanbackPanelScreenTopRight(channelNoProvider = channelNoProvider)
-
-        LeanbackPanelScreenBottom(
-            iptvGroupListProvider = iptvGroupListProvider,
-            epgListProvider = epgListProvider,
-            channelNoProvider = channelNoProvider,
-            currentIptvProvider = currentIptvProvider,
-            currentIptvUrlIdxProvider = currentIptvUrlIdxProvider,
-            videoPlayerMetadataProvider = videoPlayerMetadataProvider,
-            showProgrammeProgressProvider = showProgrammeProgressProvider,
-            iptvFavoriteEnableProvider = iptvFavoriteEnableProvider,
-            iptvFavoriteListProvider = iptvFavoriteListProvider,
-            iptvFavoriteListVisibleProvider = iptvFavoriteListVisibleProvider,
-            onIptvFavoriteListVisibleChange = onIptvFavoriteListVisibleChange,
-            onIptvSelected = onIptvSelected,
-            onIptvFavoriteToggle = onIptvFavoriteToggle,
-            onUserAction = { autoCloseState.active() },
-        )
-    }
-}
 
 @Composable
 fun LeanbackPanelScreenTopRight(

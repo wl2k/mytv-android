@@ -45,7 +45,6 @@ class LeanbackMedia3VideoPlayer(
     private val contentTypeAttempts = mutableMapOf<Int, Boolean>()
     private var updatePositionJob: Job? = null
 
-    @OptIn(UnstableApi::class)
     private fun prepare(uri: Uri, contentType: Int? = null) {
         val dataSourceFactory =
             DefaultDataSource.Factory(context, DefaultHttpDataSource.Factory().apply {

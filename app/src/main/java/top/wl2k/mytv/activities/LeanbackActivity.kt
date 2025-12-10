@@ -1,9 +1,6 @@
 package top.wl2k.mytv.activities
 
-import android.app.PictureInPictureParams
-import android.os.Build
 import android.os.Bundle
-import android.util.Rational
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -20,21 +17,8 @@ import top.wl2k.mytv.ui.LeanbackApp
 import top.wl2k.mytv.ui.screens.leanback.toast.Toaster
 import top.wl2k.mytv.ui.theme.LeanbackTheme
 import top.wl2k.mytv.ui.utils.HttpServer
-import top.wl2k.mytv.ui.utils.SP
 
 class LeanbackActivity : ComponentActivity() {
-    override fun onUserLeaveHint() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
-        if (!SP.uiPipMode) return
-
-        enterPictureInPictureMode(
-            PictureInPictureParams.Builder()
-                .setAspectRatio(Rational(16, 9))
-                .build()
-        )
-        super.onUserLeaveHint()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Toaster.init(this)

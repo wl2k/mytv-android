@@ -28,7 +28,7 @@ fun LeanbackSettingsCategoryHttp(
                 headlineContent = "HTTP请求重试次数",
                 supportingContent = "影响直播源、节目单数据获取",
                 trailingContent = Constants.HTTP_RETRY_COUNT.toString(),
-                locK = true,
+                lock = true,
             )
         }
         item {
@@ -36,7 +36,7 @@ fun LeanbackSettingsCategoryHttp(
                 headlineContent = "HTTP请求重试间隔时间",
                 supportingContent = "影响直播源、节目单数据获取",
                 trailingContent = Constants.HTTP_RETRY_INTERVAL.humanizeMs(),
-                locK = true,
+                lock = true,
             )
         }
     }

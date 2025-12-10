@@ -40,8 +40,8 @@ fun LeanbackVideoScreen(
                 // PlayerView 切换视频时黑屏闪烁，使用 SurfaceView 代替
                 SurfaceView(context)
             },
-            update = { surfaceView ->
-                state.setVideoSurfaceView(surfaceView)
+            update = {
+                state.setVideoSurfaceView(it)
             },
         )
 

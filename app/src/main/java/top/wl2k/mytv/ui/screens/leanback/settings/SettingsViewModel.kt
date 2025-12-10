@@ -146,14 +146,6 @@ class LeanbackSettingsViewModel : ViewModel() {
             SP.uiShowEpgProgrammeProgress = value
         }
 
-    private var _uiUseClassicPanelScreen by mutableStateOf(SP.uiUseClassicPanelScreen)
-    var uiUseClassicPanelScreen: Boolean
-        get() = _uiUseClassicPanelScreen
-        set(value) {
-            _uiUseClassicPanelScreen = value
-            SP.uiUseClassicPanelScreen = value
-        }
-
     private var _uiDensityScaleRatio by mutableFloatStateOf(SP.uiDensityScaleRatio)
     var uiDensityScaleRatio: Float
         get() = _uiDensityScaleRatio
@@ -176,14 +168,6 @@ class LeanbackSettingsViewModel : ViewModel() {
         set(value) {
             _uiTimeShowMode = value
             SP.uiTimeShowMode = value
-        }
-
-    private var _uiPipMode by mutableStateOf(SP.uiPipMode)
-    var uiPipMode: Boolean
-        get() = _uiPipMode
-        set(value) {
-            _uiPipMode = value
-            SP.uiPipMode = value
         }
 
     private var _videoPlayerUserAgent by mutableStateOf(SP.videoPlayerUserAgent)

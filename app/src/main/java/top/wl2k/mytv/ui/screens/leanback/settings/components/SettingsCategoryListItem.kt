@@ -32,7 +32,7 @@ fun LeanbackSettingsCategoryListItem(
     trailingContent: @Composable () -> Unit = {},
     onSelected: (() -> Unit)? = null,
     onLongSelected: () -> Unit = {},
-    locK: Boolean = false,
+    lock: Boolean = false,
     remoteConfig: Boolean = false,
 ) {
     val focusRequester = remember { FocusRequester() }
@@ -55,7 +55,7 @@ fun LeanbackSettingsCategoryListItem(
                 verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
             ) {
                 trailingContent()
-                if (locK) {
+                if (lock) {
                     Icon(
                         Icons.Default.Lock,
                         contentDescription = null,
@@ -106,7 +106,7 @@ fun LeanbackSettingsCategoryListItem(
     trailingContent: String,
     onSelected: () -> Unit = {},
     onLongSelected: () -> Unit = {},
-    locK: Boolean = false,
+    lock: Boolean = false,
     remoteConfig: Boolean = false,
 ) {
     LeanbackSettingsCategoryListItem(
@@ -116,7 +116,7 @@ fun LeanbackSettingsCategoryListItem(
         trailingContent = { androidx.tv.material3.Text(trailingContent) },
         onSelected = onSelected,
         onLongSelected = onLongSelected,
-        locK = locK,
+        lock = lock,
         remoteConfig = remoteConfig,
     )
 }
