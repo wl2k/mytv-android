@@ -46,6 +46,11 @@ object HttpServer : Loggable() {
         }
     }
 
+    fun stop() {
+        server?.stop()
+        server = null
+    }
+
     private fun getLocalIpAddress(): String {
         val defaultIp = "127.0.0.1"
         try {

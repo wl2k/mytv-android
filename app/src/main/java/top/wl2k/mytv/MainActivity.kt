@@ -1,4 +1,4 @@
-package top.wl2k.mytv.activities
+package top.wl2k.mytv
 
 import android.os.Bundle
 import android.view.WindowManager
@@ -18,7 +18,7 @@ import top.wl2k.mytv.ui.screens.leanback.toast.Toaster
 import top.wl2k.mytv.ui.theme.LeanbackTheme
 import top.wl2k.mytv.ui.utils.HttpServer
 
-class LeanbackActivity : ComponentActivity() {
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Toaster.init(this)
@@ -45,6 +45,7 @@ class LeanbackActivity : ComponentActivity() {
                 ) {
                     LeanbackApp(
                         onBackPressed = {
+                            HttpServer.stop()
                             finish()
                         },
                     )
