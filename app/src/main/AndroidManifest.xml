@@ -30,6 +30,7 @@
 
         <activity
             android:name=".activities.LeanbackActivity"
+            android:launchMode="singleTop"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|screenLayout|keyboardHidden"
             android:exported="true"
             android:screenOrientation="sensorLandscape"
