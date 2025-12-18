@@ -1,5 +1,6 @@
 package top.wl2k.mytv
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
@@ -14,15 +15,14 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import top.wl2k.mytv.ui.LeanbackApp
-import top.wl2k.mytv.ui.screens.leanback.toast.Toaster
 import top.wl2k.mytv.ui.theme.LeanbackTheme
 import top.wl2k.mytv.ui.utils.HttpServer
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Toaster.init(this)
 
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
         enableEdgeToEdge()
         setContent {
             // 隐藏状态栏、导航栏

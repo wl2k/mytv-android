@@ -6,11 +6,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import top.wl2k.mytv.ui.utils.SP
-import top.wl2k.mytv.utils.Loggable
 
 abstract class LeanbackVideoPlayer(
     private val coroutineScope: CoroutineScope,
-) : Loggable() {
+) {
     private var loadTimeoutJob: Job? = null
     private var cutoffTimeoutJob: Job? = null
     private var currentPosition = -1L

@@ -49,10 +49,9 @@ fun LeanbackPanelScreenTopRight(
     ) {
         Column(
             modifier = Modifier.align(Alignment.TopEnd),
-            horizontalAlignment = Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.End,
         ) {
             LeanbackPanelChannelNo(
-                modifier = Modifier.align(Alignment.End),
                 fontSize = 96,
                 channelNoProvider = channelNoProvider
             )

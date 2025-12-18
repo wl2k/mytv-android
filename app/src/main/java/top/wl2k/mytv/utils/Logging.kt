@@ -8,7 +8,7 @@ import top.wl2k.mytv.data.utils.Constants
 /**
  * 日志工具类
  */
-class Logger private constructor(
+class Logging(
     private val tag: String
 ) {
     fun d(message: String, throwable: Throwable? = null) {
@@ -32,8 +32,6 @@ class Logger private constructor(
     }
 
     companion object {
-        fun create(tag: String) = Logger(tag)
-
         private val _history = mutableListOf<HistoryItem>()
         val history: List<HistoryItem>
             get() = _history
@@ -60,9 +58,15 @@ class Logger private constructor(
 }
 
 /**
- * 注入日志
+ * 一个标记接口，用于：
+ * 1. 告诉 ProGuard/R8 不要混淆实现此接口的类的名称。
+ * 2. 自动为实现类提供一个 Logging 实例。
  */
-abstract class Loggable() {
-    protected val log: Logger
-        get() = Logger.create(javaClass.simpleName)
+interface Logger {
+    /**
+     * 提供一个 Logging 实例。
+     * 'javaClass.simpleName' 会在运行时获取到具体实现类的名称。
+     */
+    val log: Logging
+        get() = Logging(javaClass.simpleName)
 }

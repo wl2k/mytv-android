@@ -7,7 +7,6 @@ import java.security.SecureRandom
 import java.security.cert.X509Certificate
 import javax.net.ssl.HttpsURLConnection
 import javax.net.ssl.SSLContext
-import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
 // 防止部分直播源链接证书不被信任
@@ -23,23 +22,20 @@ class UnsafeTrustManager : X509TrustManager {
         // Do nothing and trust all certificates
     }
 
-    override fun getAcceptedIssuers(): Array<X509Certificate> {
-        return emptyArray()
-    }
+    override fun getAcceptedIssuers(): Array<X509Certificate> = emptyArray()
 
     companion object {
         fun enable() {
             try {
-                val trustAllCerts = arrayOf<TrustManager>(UnsafeTrustManager())
+                val trustAllCerts = arrayOf(UnsafeTrustManager())
                 val sslContext = SSLContext.getInstance("TLS")
                 sslContext.init(null, trustAllCerts, SecureRandom())
                 HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.socketFactory)
                 HttpsURLConnection.setDefaultHostnameVerifier { _, _ -> true }
             } catch (e: Exception) {
                 when (e) {
-                    is NoSuchAlgorithmException, is KeyManagementException -> {
+                    is NoSuchAlgorithmException, is KeyManagementException ->
                         e.printStackTrace()
-                    }
                 }
             }
         }

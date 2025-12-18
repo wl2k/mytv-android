@@ -22,8 +22,7 @@ import java.util.Locale
 /**
  * 节目单获取
  */
-class EpgRepository : FileCacheRepository("epg.json") {
-    private val log = Logger.create(javaClass.simpleName)
+class EpgRepository : FileCacheRepository("epg.json"), Logger {
     private val epgXmlRepository = EpgXmlRepository()
 
     /**
@@ -120,9 +119,7 @@ class EpgRepository : FileCacheRepository("epg.json") {
 /**
  * 节目单xml获取
  */
-private class EpgXmlRepository : FileCacheRepository("epg.xml") {
-    private val log = Logger.create(javaClass.simpleName)
-
+private class EpgXmlRepository : FileCacheRepository("epg.xml"), Logger {
     /**
      * 获取远程xml
      */

@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import top.wl2k.mytv.ui.screens.leanback.settings.LeanbackSettingsCategories
-import top.wl2k.mytv.utils.Logger
+import top.wl2k.mytv.utils.Logging
 
 @Composable
 fun LeanbackSettingsCategoryContent(
@@ -32,7 +32,7 @@ fun LeanbackSettingsCategoryContent(
             LeanbackSettingsCategories.HTTP -> LeanbackSettingsCategoryHttp()
             LeanbackSettingsCategories.DEBUG -> LeanbackSettingsCategoryDebug()
             LeanbackSettingsCategories.LOG -> LeanbackSettingsCategoryLog(
-                history = Logger.history,
+                history = Logging.history,
             )
 
             LeanbackSettingsCategories.ABOUT -> LeanbackSettingsCategoryAbout()

@@ -20,7 +20,7 @@ import top.wl2k.mytv.data.utils.Constants
 import top.wl2k.mytv.ui.screens.leanback.video.LeanbackVideoPlayerState
 import top.wl2k.mytv.ui.screens.leanback.video.rememberLeanbackVideoPlayerState
 import top.wl2k.mytv.ui.utils.SP
-import top.wl2k.mytv.utils.Loggable
+import top.wl2k.mytv.utils.Logger
 import kotlin.math.max
 
 @Stable
@@ -28,7 +28,7 @@ class LeanbackMainContentState(
     coroutineScope: CoroutineScope,
     private val videoPlayerState: LeanbackVideoPlayerState,
     private val iptvGroupList: IptvGroupList,
-) : Loggable() {
+) : Logger {
     private var _currentIptv by mutableStateOf(Iptv())
     val currentIptv get() = _currentIptv
 

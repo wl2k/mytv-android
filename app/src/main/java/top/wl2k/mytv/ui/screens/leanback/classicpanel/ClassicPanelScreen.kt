@@ -29,7 +29,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.serialization.InternalSerializationApi
 import top.wl2k.mytv.data.entities.Epg
 import top.wl2k.mytv.data.entities.EpgList
 import top.wl2k.mytv.data.entities.EpgProgramme
@@ -124,7 +123,7 @@ private fun LeanbackClassicPanelScreenWrapper(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class, InternalSerializationApi::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun LeanbackClassicPanelScreenContent(
     modifier: Modifier = Modifier,
@@ -241,7 +240,7 @@ private fun LeanbackClassicPanelVerticalTip(
     modifier: Modifier = Modifier,
     onTap: () -> Unit = {},
 ) {
-    val text = "向右查看节目单"
+    val text = "节目单"
 
     Column(
         modifier = modifier
@@ -253,7 +252,7 @@ private fun LeanbackClassicPanelVerticalTip(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         text.map {
-            Text(text = it.toString(), style = MaterialTheme.typography.labelSmall)
+            Text("$it", style = MaterialTheme.typography.labelSmall)
         }
     }
 }

@@ -18,15 +18,15 @@ import top.wl2k.mytv.data.repositories.iptv.IptvRepository
 import top.wl2k.mytv.data.utils.Constants
 import top.wl2k.mytv.ui.screens.leanback.toast.Toaster
 import top.wl2k.mytv.utils.ApkInstaller
-import top.wl2k.mytv.utils.Loggable
 import top.wl2k.mytv.utils.Logger
+import top.wl2k.mytv.utils.Logging
 import java.io.File
 import java.io.IOException
 import java.net.Inet4Address
 import java.net.NetworkInterface
 import java.net.SocketException
 
-object HttpServer : Loggable() {
+object HttpServer : Logger {
     private const val SERVER_PORT = 10481
 
     @SuppressLint("StaticFieldLeak")
@@ -119,7 +119,7 @@ object HttpServer : Loggable() {
                     iptvSourceUrl = SP.iptvSourceUrl,
                     epgXmlUrl = SP.epgXmlUrl,
                     videoPlayerUserAgent = SP.videoPlayerUserAgent,
-                    logHistory = Logger.history,
+                    logHistory = Logging.history,
                 )
                 return newJsonResponse(settings)
             }
@@ -231,12 +231,11 @@ object HttpServer : Loggable() {
     }
 }
 
-@SuppressLint("UnsafeOptInUsageError")
 @Serializable
 private data class AllSettings(
     val appRepo: String,
     val iptvSourceUrl: String,
     val epgXmlUrl: String,
     val videoPlayerUserAgent: String,
-    val logHistory: List<Logger.HistoryItem>,
+    val logHistory: List<Logging.HistoryItem>,
 )

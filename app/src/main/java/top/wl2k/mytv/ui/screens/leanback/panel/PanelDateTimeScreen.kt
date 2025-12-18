@@ -37,25 +37,27 @@ fun LeanbackPanelDateTimeScreen(
         while (true) {
             val timestamp = System.currentTimeMillis()
 
-            visible = when (showModeProvider()) {
-                SP.UiTimeShowMode.HIDDEN -> false
-                SP.UiTimeShowMode.ALWAYS -> true
+            visible =
+                when (showModeProvider()) {
+                    SP.UiTimeShowMode.HIDDEN -> false
+                    SP.UiTimeShowMode.ALWAYS -> true
+                    SP.UiTimeShowMode.EVERY_HOUR ->
+                        timestamp % 3600000 <= (Constants.UI_TIME_SHOW_RANGE + 1000) ||
+                                timestamp % 3600000 >= 3600000 - Constants.UI_TIME_SHOW_RANGE
 
-                SP.UiTimeShowMode.EVERY_HOUR -> {
-                    timestamp % 3600000 <= (Constants.UI_TIME_SHOW_RANGE + 1000) || timestamp % 3600000 >= 3600000 - Constants.UI_TIME_SHOW_RANGE
+                    SP.UiTimeShowMode.HALF_HOUR ->
+                        timestamp % 1800000 <= (Constants.UI_TIME_SHOW_RANGE + 1000) ||
+                                timestamp % 1800000 >= 1800000 - Constants.UI_TIME_SHOW_RANGE
                 }
 
-                SP.UiTimeShowMode.HALF_HOUR -> {
-                    timestamp % 1800000 <= (Constants.UI_TIME_SHOW_RANGE + 1000) || timestamp % 1800000 >= 1800000 - Constants.UI_TIME_SHOW_RANGE
-                }
-            }
-
-            if (visible) {
-                timeText = when (showModeProvider()) {
-                    SP.UiTimeShowMode.ALWAYS -> SimpleDateFormat("HH:mm", Locale.getDefault())
-                    else -> SimpleDateFormat("HH:mm:ss", Locale.getDefault())
-                }.format(timestamp)
-            }
+            if (visible)
+                timeText =
+                    SimpleDateFormat(
+                        if (showModeProvider() == SP.UiTimeShowMode.ALWAYS) "HH:mm"
+                        else "HH:mm:ss",
+                        Locale.getDefault()
+                    )
+                        .format(timestamp)
 
             delay(1000)
         }
@@ -66,23 +68,22 @@ fun LeanbackPanelDateTimeScreen(
             Text(
                 text = timeText,
                 style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(top = childPadding.top, end = childPadding.end)
-                    .background(
-                        color = MaterialTheme.colorScheme.surface.copy(0.8f),
-                        shape = MaterialTheme.shapes.small,
-                    )
-                    .padding(horizontal = 8.dp, vertical = 4.dp),
+                modifier =
+                    Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(top = childPadding.top, end = childPadding.end)
+                        .background(
+                            color = MaterialTheme.colorScheme.surface.copy(0.8f),
+                            shape = MaterialTheme.shapes.small,
+                        )
+                        .padding(horizontal = 8.dp, vertical = 4.dp),
             )
         }
     }
 }
 
-@Preview(device = "id:pixel_5")
+@Preview()
 @Composable
 private fun LeanbackPanelDateTimeScreenPreview() {
-    LeanbackTheme {
-        LeanbackPanelDateTimeScreen(showModeProvider = { SP.UiTimeShowMode.ALWAYS })
-    }
+    LeanbackTheme { LeanbackPanelDateTimeScreen(showModeProvider = { SP.UiTimeShowMode.ALWAYS }) }
 }

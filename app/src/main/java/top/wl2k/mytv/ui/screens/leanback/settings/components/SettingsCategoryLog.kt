@@ -11,14 +11,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.persistentListOf
 import top.wl2k.mytv.ui.theme.LeanbackTheme
-import top.wl2k.mytv.utils.Logger
+import top.wl2k.mytv.utils.Logging
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 @Composable
 fun LeanbackSettingsCategoryLog(
     modifier: Modifier = Modifier,
-    history: List<Logger.HistoryItem> = emptyList(),
+    history: List<Logging.HistoryItem> = emptyList(),
 ) {
     val timeFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
     val historySorted = remember(history) {
@@ -46,8 +46,8 @@ private fun LeanbackSettingsCategoryLogPreview() {
     LeanbackTheme {
         LeanbackSettingsCategoryLog(
             history = persistentListOf(
-                Logger.HistoryItem(
-                    level = Logger.LevelType.ERROR,
+                Logging.HistoryItem(
+                    level = Logging.LevelType.ERROR,
                     tag = "LeanbackSettingsCategoryLog",
                     message = "This is a test message",
                     time = System.currentTimeMillis(),

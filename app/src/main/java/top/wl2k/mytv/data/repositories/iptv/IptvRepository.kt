@@ -15,9 +15,7 @@ import top.wl2k.mytv.utils.Logger
 /**
  * 直播源获取
  */
-class IptvRepository : FileCacheRepository("iptv.txt") {
-    private val log = Logger.create(javaClass.simpleName)
-
+class IptvRepository : FileCacheRepository("iptv.txt"), Logger {
     /**
      * 获取远程直播源数据
      */

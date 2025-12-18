@@ -18,13 +18,13 @@ import java.util.Locale
 @Composable
 fun LeanbackPanelDateTime(
     modifier: Modifier = Modifier,
+    timeFormat: SimpleDateFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault()),
     timestamp: Long = rememberTimestamp(),
 ) {
-    val timeFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
     Text(
-        modifier = modifier,
         text = timeFormat.format(timestamp),
         style = MaterialTheme.typography.headlineMedium,
+        modifier = modifier,
     )
 }
 
