@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!--suppress HtmlUnknownTarget, HtmlUnknownAttribute -->
 <html lang="zh">
 
 <head>
@@ -37,14 +38,13 @@
 
             <template v-if="tabActive === 'config'">
                 <van-cell-group
-                        inset
-                        title="通知">
+                        inset="" title="通知">
                     <van-cell title="修改之前请先关闭应用的设置界面，否则会有冲突"></van-cell>
                     <van-cell title="以下设置修改后，需要重启应用生效"></van-cell>
                 </van-cell-group>
 
                 <van-cell-group
-                        inset
+                        inset=""
                         title="直播源">
                     <van-cell title="自定义直播源">
                         <template #label>
@@ -73,7 +73,7 @@
                 </van-cell-group>
 
                 <van-cell-group
-                        inset
+                        inset=""
                         title="节目单">
                     <van-cell title="自定义节目单">
                         <template #label>
@@ -102,7 +102,7 @@
                 </van-cell-group>
 
                 <van-cell-group
-                        inset
+                        inset=""
                         title="播放器">
                     <van-cell title="自定义 User-Agent">
                         <template #label>
@@ -130,7 +130,7 @@
                 </van-cell-group>
 
                 <van-cell-group
-                        inset
+                        inset=""
                         title="DEBUG">
                     <van-cell title="上传 APK">
                         <template #extra>
@@ -151,8 +151,8 @@
                         <template #title>
                             <div class="flex flex-col gap-1">
                                 <div class="flex gap-1 items-center">
-                                    <van-tag plain>{{ item.level[0] }}</van-tag>&nbsp;
-                                    <van-tag plain>{{ item.tag }}</van-tag>
+                                    <van-tag plain="">{{ item.level[0] }}</van-tag>&nbsp;
+                                    <van-tag plain="">{{ item.tag }}</van-tag>
                                 </div>
                                 <span>{{ item.message }}</span>
                             </div>
@@ -181,7 +181,7 @@
 
         <van-empty
                 image="network"
-                v-else/>
+                v-else=""></van-empty>
     </van-config-provider>
 </div>
 
