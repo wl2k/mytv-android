@@ -127,7 +127,7 @@ object HttpServer : Logger {
                     ),
                     system = SystemInfo(
                         bootTime = SystemClock.elapsedRealtime().humanizeMs(),
-                        device = Build.FINGERPRINT,
+                        device = Build.MODEL,
                         androidVersion = "Android ${Build.VERSION.RELEASE}",
                     ),
                 )
