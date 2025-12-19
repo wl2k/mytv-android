@@ -32,7 +32,7 @@ object Constants {
     /**
      * HTTP请求重试次数
      */
-    const val HTTP_RETRY_COUNT = 10L
+    const val HTTP_RETRY_COUNT = 5L
 
     /**
      * HTTP请求重试间隔时间（毫秒）

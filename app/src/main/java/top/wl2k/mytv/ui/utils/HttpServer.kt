@@ -2,6 +2,8 @@ package top.wl2k.mytv.ui.utils
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
+import android.os.SystemClock
 import androidx.annotation.RawRes
 import fi.iki.elonen.NanoHTTPD
 import fi.iki.elonen.NanoHTTPD.SOCKET_READ_TIMEOUT
@@ -20,6 +22,7 @@ import top.wl2k.mytv.ui.screens.leanback.toast.Toaster
 import top.wl2k.mytv.utils.ApkInstaller
 import top.wl2k.mytv.utils.Logger
 import top.wl2k.mytv.utils.Logging
+import top.wl2k.mytv.utils.humanizeMs
 import java.io.File
 import java.io.IOException
 import java.net.Inet4Address
@@ -106,7 +109,7 @@ object HttpServer : Logger {
             private val json: Json,
         ) {
             fun matches(method: Method, uri: String) =
-                session.method == method && session.uri.equals(uri)
+                session.method == method && session.uri == uri
 
             fun handleHtml() = newRawResponse(context, "text/html", R.raw.index)
             fun handleCss() = newRawResponse(context, "text/css", R.raw.styles)
@@ -115,11 +118,18 @@ object HttpServer : Logger {
 
             fun handleGetSettings(): Response {
                 val settings = AllSettings(
-                    appRepo = Constants.APP_REPO,
                     iptvSourceUrl = SP.iptvSourceUrl,
                     epgXmlUrl = SP.epgXmlUrl,
                     videoPlayerUserAgent = SP.videoPlayerUserAgent,
                     logHistory = Logging.history,
+                    app = AppInfo(
+                        repo = Constants.APP_REPO,
+                    ),
+                    system = SystemInfo(
+                        bootTime = SystemClock.elapsedRealtime().humanizeMs(),
+                        device = Build.FINGERPRINT,
+                        androidVersion = "Android ${Build.VERSION.RELEASE}",
+                    ),
                 )
                 return newJsonResponse(settings)
             }
@@ -233,9 +243,22 @@ object HttpServer : Logger {
 
 @Serializable
 private data class AllSettings(
-    val appRepo: String,
     val iptvSourceUrl: String,
     val epgXmlUrl: String,
     val videoPlayerUserAgent: String,
     val logHistory: List<Logging.HistoryItem>,
+    val app: AppInfo,
+    val system: SystemInfo,
+)
+
+@Serializable
+private data class AppInfo(
+    val repo: String,
+)
+
+@Serializable
+private data class SystemInfo(
+    val bootTime: String,
+    val device: String,
+    val androidVersion: String,
 )
