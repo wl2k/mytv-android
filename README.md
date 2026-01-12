@@ -1,14 +1,10 @@
-<div align="center">
-    <h1>我的电视</h1>
-<div align="center">
+# 我的电视
 
 ![GitHub repo size](https://img.shields.io/github/repo-size/yaoxieyoulei/mytv-android)
 ![GitHub Repo stars](https://img.shields.io/github/stars/yaoxieyoulei/mytv-android)
 ![GitHub all releases](https://img.shields.io/github/downloads/yaoxieyoulei/mytv-android/total)
 
-</div>
-    <p>使用Android原生开发的视频播放软件</p>
-</div>
+使用Android原生开发的视频播放软件
 
 ## 使用
 
@@ -114,10 +110,6 @@
 ## 技术交流
 
 Telegram: https://t.me/mytv_android
-
-## 赞赏
-
-<img src="./screenshots/mm_reward_qrcode.png" width="48%"/>
 
 ## 致谢
 

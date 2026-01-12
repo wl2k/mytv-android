@@ -105,8 +105,9 @@ fun LeanbackSettingsCategoryIptv(
                 supportingContent = "短按增加1小时，长按设为0小时",
                 trailingContent = settingsViewModel.iptvSourceCacheTime.humanizeMs(),
                 onSelected = {
+                    val hour = 1000 * 60 * 60
                     settingsViewModel.iptvSourceCacheTime =
-                        (settingsViewModel.iptvSourceCacheTime + 1 * 1000 * 60 * 60) % (1000 * 60 * 60 * 24)
+                        (settingsViewModel.iptvSourceCacheTime + hour) % (hour * 24)
                 },
                 onLongSelected = {
                     settingsViewModel.iptvSourceCacheTime = 0
@@ -201,9 +202,7 @@ private fun LeanbackSettingsIptvSourceHistoryDialog(
                     items(iptvSourceHistory) { source ->
                         val focusRequester = remember { FocusRequester() }
                         var isFocused by remember {
-                            mutableStateOf(
-                                false
-                            )
+                            mutableStateOf(false)
                         }
 
                         LaunchedEffect(Unit) {
@@ -230,7 +229,7 @@ private fun LeanbackSettingsIptvSourceHistoryDialog(
                             selected = currentIptvSource == source,
                             onClick = { },
                             headlineContent = {
-                                androidx.tv.material3.Text(
+                                Text(
                                     text = if (source == Constants.IPTV_SOURCE_URL) "默认直播源（网络需要支持ipv6）" else source,
                                     modifier = Modifier.fillMaxWidth(),
                                     maxLines = if (isFocused) Int.MAX_VALUE else 2,
@@ -272,7 +271,7 @@ private fun LeanbackSettingsIptvSourceHistoryDialog(
                             selected = false,
                             onClick = {},
                             headlineContent = {
-                                androidx.tv.material3.Text("添加其他直播源")
+                                Text("添加其他直播源")
                             },
                         )
 

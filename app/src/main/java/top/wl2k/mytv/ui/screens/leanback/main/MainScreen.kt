@@ -174,7 +174,7 @@ private fun LeanbackMainScreenErrorPreview() {
 private fun LeanbackMainScreenErrorLongPreview() {
     LeanbackTheme {
         LeanbackMainScreenError(
-            { "Caused by: androidx.media3.datasource.HttpDataSource\$HttpDataSourceException:" + " java.io.IOException: unexpected end of stream on com.android.okhttp.Address@2f10c24d" },
+            { $$"Caused by: androidx.media3.datasource.HttpDataSource$HttpDataSourceException:" + " java.io.IOException: unexpected end of stream on com.android.okhttp.Address@2f10c24d" },
             "http://127.0.0.1:8080",
         )
     }

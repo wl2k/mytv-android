@@ -82,7 +82,7 @@ fun LeanbackPanelDateTimeScreen(
     }
 }
 
-@Preview()
+@Preview
 @Composable
 private fun LeanbackPanelDateTimeScreenPreview() {
     LeanbackTheme { LeanbackPanelDateTimeScreen(showModeProvider = { SP.UiTimeShowMode.ALWAYS }) }
