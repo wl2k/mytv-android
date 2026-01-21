@@ -10,7 +10,7 @@ media3 = "1.9.0"
 okhttp = "5.3.2"
 nanohttpd = "2.3.1"
 qrose = "1.0.1"
-kotlinx-serialization = "1.9.0"
+kotlinx-serialization = "1.10.0"
 tvMaterial = "1.0.1"
 
 [libraries]
