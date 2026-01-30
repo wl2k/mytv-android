@@ -15,7 +15,7 @@ jobs:
           keystore-password: ${{ secrets.KEYSTORE_PASSWORD }}
           key-alias: ${{ secrets.KEY_ALIAS }}
           key-password: ${{ secrets.KEY_PASSWORD }}
-          release: ${{ github.event_name != 'pull_request' }}
+          release: ${{ github.ref_name == 'main' }}
 
       - name: Get Date
         run: echo "DATE=$(date +'%F_%H%S')" >>"$GITHUB_ENV"
