@@ -15,12 +15,13 @@ jobs:
           keystore-password: ${{ secrets.KEYSTORE_PASSWORD }}
           key-alias: ${{ secrets.KEY_ALIAS }}
           key-password: ${{ secrets.KEY_PASSWORD }}
+          release: ${{ github.ref_name == 'main' }}
 
       - name: Get Date
         run: echo "DATE=$(date +'%F_%H%S')" >>"$GITHUB_ENV"
 
       - name: Release
-        if: github.event_name != 'pull_request'
+        if: github.ref_name == 'main'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ env.DATE }}
