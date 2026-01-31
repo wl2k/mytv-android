@@ -9,19 +9,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: WaterLemons2k/apk-action@main
+      - uses: WaterLemons2k/apk-action@v1
         with:
           keystore: ${{ secrets.KEYSTORE }}
           keystore-password: ${{ secrets.KEYSTORE_PASSWORD }}
           key-alias: ${{ secrets.KEY_ALIAS }}
           key-password: ${{ secrets.KEY_PASSWORD }}
-          release: ${{ startsWith(github.ref, 'refs/tags/') }}
+          release: ${{ startsWith(github.ref, 'refs/tags') }}
 
       - name: Get Date
         run: echo "DATE=$(date +'%F_%H%S')" >>"$GITHUB_ENV"
 
       - name: Release
-        if: startsWith(github.ref, 'refs/tags/')
+        if: startsWith(github.ref, 'refs/tags')
         uses: softprops/action-gh-release@v2
         with:
           files: app/build/outputs/apk/release/*.apk
