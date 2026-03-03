@@ -1,5 +1,5 @@
 [versions]
-agp = "9.0.0"
+agp = "9.0.1"
 kotlin = "2.3.10"
 coreKtx = "1.17.0"
 kotlinxCollectionsImmutable = "0.4.0"
