@@ -1,6 +1,6 @@
 [versions]
 agp = "9.1.0"
-kotlin = "2.3.10"
+kotlin = "2.3.20"
 coreKtx = "1.18.0"
 kotlinxCollectionsImmutable = "0.4.0"
 lifecycleRuntimeKtx = "2.10.0"
