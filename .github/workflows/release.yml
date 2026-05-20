@@ -18,7 +18,7 @@ jobs:
           release: ${{ startsWith(github.ref, 'refs/tags') }}
 
       - name: Get Date
-        run: echo "DATE=$(date +'%F_%H%S')" >>"$GITHUB_ENV"
+        run: echo "DATE=$(date +'%F_%H%M')" >>"$GITHUB_ENV"
 
       - name: Upload Artifact
         if: "!startsWith(github.ref, 'refs/tags')"
