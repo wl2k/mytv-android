@@ -1,9 +1,5 @@
 # 我的电视
 
-![GitHub repo size](https://img.shields.io/github/repo-size/yaoxieyoulei/mytv-android)
-![GitHub Repo stars](https://img.shields.io/github/stars/yaoxieyoulei/mytv-android)
-![GitHub all releases](https://img.shields.io/github/downloads/yaoxieyoulei/mytv-android/total)
-
 使用Android原生开发的视频播放软件
 
 ## 使用
@@ -76,40 +72,6 @@
 ## 下载
 
 可以通过右侧release进行下载或拉取代码到本地进行编译
-
-## 说明
-
-- 主要解决 [my_tv](https://github.com/yaoxieyoulei/my_tv)（flutter）在低端设备上播放（4k）视频卡顿掉帧
-- 仅支持Android5及以上
-- 网络环境必须支持IPV6（默认订阅源）
-- 只在自家电视上测过，其他电视稳定性未知
-
-## 功能
-
-- [x] 换台反转
-- [x] 数字选台
-- [x] 节目单
-- [x] 开机自启
-- [x] 自动更新
-- [x] 多订阅源
-- [x] 多线路
-- [x] 自定义订阅源
-- [x] 多节目单
-- [x] 自定义节目单
-- [x] 频道收藏
-- [x] 应用自定义设置
-
-## 更新日志
-
-[更新日志](./CHANGELOG.md)
-
-## 声明
-
-此项目（我的电视）是个人为了兴趣而开发, 仅用于学习和测试。 所用API皆从官方网站收集, 不提供任何破解内容。
-
-## 技术交流
-
-Telegram: https://t.me/mytv_android
 
 ## 致谢
 
