@@ -1,26 +1,21 @@
-import java.io.FileInputStream
-import java.util.Properties
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.serialization)
 }
 
-val keystorePropertiesFile = rootProject.file("key.properties")
-val keystoreProperties = Properties()
-if (keystorePropertiesFile.exists()) {
-    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+kotlin {
+    jvmToolchain(8)
 }
 
 android {
     namespace = "top.wl2k.mytv"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "top.wl2k.mytv"
         minSdk = 23
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 145
         versionName = "1.4.5"
 
@@ -41,13 +36,6 @@ android {
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    kotlin {
-        jvmToolchain(8)
-    }
 
     buildFeatures {
         compose = true
@@ -57,26 +45,10 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-    signingConfigs {
-        create("release") {
-            storeFile =
-                file(System.getenv("KEYSTORE") ?: keystoreProperties["storeFile"] ?: "keystore.jks")
-            storePassword = System.getenv("KEYSTORE_PASSWORD")
-                ?: keystoreProperties.getProperty("storePassword")
-            keyAlias = System.getenv("KEY_ALIAS") ?: keystoreProperties.getProperty("keyAlias")
-            keyPassword =
-                System.getenv("KEY_PASSWORD") ?: keystoreProperties.getProperty("keyPassword")
-        }
-    }
-    buildTypes {
-        getByName("release") {
-            signingConfig = signingConfigs.getByName("release")
-        }
-    }
 }
 
 dependencies {
-    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.core)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.activity.compose)
