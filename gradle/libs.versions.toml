@@ -2,7 +2,7 @@
 agp = "9.2.1"
 kotlin = "2.4.0"
 core = "1.19.0"
-kotlinxCollectionsImmutable = "0.5.0"
+kotlinxCollectionsImmutable = "0.5.1"
 lifecycleRuntime = "2.11.0"
 composeBom = "2026.06.01"
 activityCompose = "1.13.0"
