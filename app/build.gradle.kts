@@ -20,8 +20,8 @@ android {
         applicationId = "top.wl2k.mytv"
         minSdk = 24
         targetSdk = 37
-        versionCode = 145
-        versionName = "1.4.5"
+        versionCode = 148
+        versionName = "1.4.8"
 
         vectorDrawables {
             useSupportLibrary = true
