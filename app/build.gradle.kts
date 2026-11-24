@@ -10,7 +10,10 @@ kotlin {
 
 android {
     namespace = "top.wl2k.mytv"
-    compileSdk = 37
+    compileSdk {
+        version = release(37) {
+            minorApiLevel = 1
+        }
 
     defaultConfig {
         applicationId = "top.wl2k.mytv"
