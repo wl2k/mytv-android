@@ -14,6 +14,7 @@ android {
         version = release(37) {
             minorApiLevel = 1
         }
+    }
 
     defaultConfig {
         applicationId = "top.wl2k.mytv"
