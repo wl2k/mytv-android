@@ -18,7 +18,7 @@ android {
 
     defaultConfig {
         applicationId = "top.wl2k.mytv"
-        minSdk = 23
+        minSdk = 24
         targetSdk = 37
         versionCode = 145
         versionName = "1.4.5"
